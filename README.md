@@ -21,10 +21,24 @@ SHARP (Single-image Human-centric Articulated Reconstruction and Processing) is 
 
 ## Screenshots
 
-<img width="500" height="501" alt="screenshot-upload" src="https://github.com/user-attachments/assets/5290bb6b-b201-47e4-ade5-ae5653f7f57c" />
-<img width="500" height="535" alt="screenshot-webcam" src="https://github.com/user-attachments/assets/11c6e19c-a550-4221-b7a0-0402a36c0463" />
-<img width="500" height="425" alt="screenshot-batch" src="https://github.com/user-attachments/assets/51acc5e0-7a4e-4795-8697-178c739283e3" />
-<img width="500" height="619" alt="screenshot-ply-converter" src="https://github.com/user-attachments/assets/f98f00fb-4b68-41bb-a09f-863d1bf34c70" />
+<table>
+  <tr>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/abc123" width="100%"/></td>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/def456" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Upload Image</sub></td>
+    <td align="center"><sub>Webcam</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/ghi789" width="100%"/></td>
+    <td width="50%"><img src="https://github.com/user-attachments/assets/jkl012" width="100%"/></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Batch Folder</sub></td>
+    <td align="center"><sub>PLY Converter</sub></td>
+  </tr>
+</table>
 
 
 
