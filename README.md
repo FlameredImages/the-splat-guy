@@ -23,23 +23,22 @@ SHARP (Single-image Human-centric Articulated Reconstruction and Processing) is 
 
 <table>
   <tr>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/abc123" width="100%"/></td>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/def456" width="100%"/></td>
+    <td width="50%"><img src="screenshots/screenshot-upload.png" width="100%"/></td>
+    <td width="50%"><img src="screenshots/screenshot-webcam.png" width="100%"/></td>
   </tr>
   <tr>
     <td align="center"><sub>Upload Image</sub></td>
     <td align="center"><sub>Webcam</sub></td>
   </tr>
   <tr>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/ghi789" width="100%"/></td>
-    <td width="50%"><img src="https://github.com/user-attachments/assets/jkl012" width="100%"/></td>
+    <td width="50%"><img src="screenshots/screenshot-batch.png" width="100%"/></td>
+    <td width="50%"><img src="screenshots/screenshot-ply-converter.png" width="100%"/></td>
   </tr>
   <tr>
     <td align="center"><sub>Batch Folder</sub></td>
     <td align="center"><sub>PLY Converter</sub></td>
   </tr>
 </table>
-
 
 
 ---
