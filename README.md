@@ -4,7 +4,6 @@ A WebUI wrapper for [Apple SHARP](https://github.com/apple/ml-sharp) — single 
 
 Built by [Stephen Ryan](https://www.flamered.co.uk) / [@flame_red_images](https://instagram.com/flame_red_images)
 
-![The Splat Guy — Upload Image](screenshots/screenshot-upload.png)
 
 ---
 
@@ -22,13 +21,12 @@ SHARP (Single-image Human-centric Articulated Reconstruction and Processing) is 
 
 ## Screenshots
 
-| Upload Image | Batch Folder |
-|---|---|
-| ![Upload](screenshots/screenshot-upload.png) | ![Batch](screenshots/screenshot-batch.png) |
+<img width="500" height="501" alt="screenshot-upload" src="https://github.com/user-attachments/assets/5290bb6b-b201-47e4-ade5-ae5653f7f57c" />
+<img width="500" height="535" alt="screenshot-webcam" src="https://github.com/user-attachments/assets/11c6e19c-a550-4221-b7a0-0402a36c0463" />
+<img width="500" height="425" alt="screenshot-batch" src="https://github.com/user-attachments/assets/51acc5e0-7a4e-4795-8697-178c739283e3" />
+<img width="500" height="619" alt="screenshot-ply-converter" src="https://github.com/user-attachments/assets/f98f00fb-4b68-41bb-a09f-863d1bf34c70" />
 
-| Webcam | PLY Converter |
-|---|---|
-| ![Webcam](screenshots/screenshot-webcam.png) | ![PLY Converter](screenshots/screenshot-ply-converter.png) |
+
 
 ---
 
