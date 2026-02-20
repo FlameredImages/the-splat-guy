@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Splat Guy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050810;--panel:#0d1526;--border:#1a2a4a;--accent:#00e5ff;--accent2:#ff3d6b;--accent3:#7b2fff;--text:#c8d8f0;--text-dim:#4a6080;--glow:0 0 20px rgba(0,229,255,0.3);--glow2:0 0 20px rgba(255,61,107,0.3);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:0;}
+  .container{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 24px 60px;}
+  header{padding:32px 0 20px;text-align:center;position:relative;}
+  .logo-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:6px;color:var(--accent);opacity:0.7;display:block;margin-bottom:6px;}
+  h1{font-family:'Bebas Neue',cursive;font-size:clamp(56px,10vw,96px);line-height:0.9;letter-spacing:4px;background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(0,229,255,0.4));animation:titlePulse 4s ease-in-out infinite;}
+  @keyframes titlePulse{0%,100%{filter:drop-shadow(0 0 30px rgba(0,229,255,0.4))}50%{filter:drop-shadow(0 0 50px rgba(0,229,255,0.7))}}
+  .tagline{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:3px;margin-top:10px;}
+  .tagline span{color:var(--accent2);}
+  .corner{position:absolute;width:20px;height:20px;opacity:0.5;}
+  .corner-tl{top:0;left:0;border-top:2px solid var(--accent);border-left:2px solid var(--accent);}
+  .corner-tr{top:0;right:0;border-top:2px solid var(--accent);border-right:2px solid var(--accent);}
+  .divider{display:flex;align-items:center;gap:12px;margin:8px 0 24px;}
+  .divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
+  .divider-dot{width:4px;height:4px;background:var(--accent);border-radius:50%;box-shadow:var(--glow);}
+  .tabs{display:flex;gap:4px;margin-bottom:20px;}
+  .tab{flex:1;padding:12px;background:var(--panel);border:1px solid var(--border);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);cursor:pointer;text-align:center;transition:all 0.2s;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{border-color:var(--accent);color:var(--accent);background:rgba(0,229,255,0.06);box-shadow:var(--glow);}
+  .tab.tc.active{border-color:var(--accent3);color:var(--accent3);background:rgba(123,47,255,0.06);box-shadow:0 0 20px rgba(123,47,255,0.3);}
+  .tab.tc:hover{border-color:var(--accent3);color:var(--accent3);}
+  .tab-content{display:none;}.tab-content.active{display:block;}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:2px;position:relative;overflow:hidden;margin-bottom:20px;}
+  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .panel-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--accent);padding:14px 20px 0;opacity:0.6;}
+  .panel-body{padding:16px 20px 20px;}
+  .drop-zone{border:2px dashed var(--border);border-radius:2px;padding:40px 24px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(0,229,255,0.02);}
+  .drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:rgba(0,229,255,0.05);box-shadow:inset 0 0 30px rgba(0,229,255,0.05),var(--glow);}
+  .drop-icon{font-size:40px;margin-bottom:12px;display:block;}
+  .drop-title{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;color:#fff;margin-bottom:6px;}
+  .drop-sub{font-size:12px;color:var(--text-dim);font-family:'Space Mono',monospace;}
+  .drop-sub span{color:var(--accent);}
+  #fileInput{display:none;}
+  .preview-wrap{display:none;margin-top:14px;position:relative;}
+  .preview-wrap img{width:100%;max-height:260px;object-fit:contain;border:1px solid var(--border);}
+  .preview-label{position:absolute;top:6px;left:6px;background:rgba(0,0,0,0.8);border:1px solid var(--accent);padding:2px 8px;font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;}
+  .folder-input-wrap{display:flex;gap:10px;align-items:stretch;}
+  .folder-input{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:12px;padding:12px 16px;outline:none;transition:border-color 0.2s;}
+  .folder-input:focus{border-color:var(--accent);}
+  .folder-input::placeholder{color:var(--text-dim);}
+  .btn-scan{padding:12px 20px;background:transparent;border:1px solid var(--accent3);color:var(--accent3);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+  .btn-scan:hover{background:rgba(123,47,255,0.1);box-shadow:0 0 15px rgba(123,47,255,0.3);}
+  .file-list{margin-top:14px;background:var(--bg);border:1px solid var(--border);border-radius:2px;max-height:200px;overflow-y:auto;display:none;}
+  .file-list-header{padding:8px 14px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;}
+  .file-list-item{padding:7px 14px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);border-bottom:1px solid rgba(26,42,74,0.5);display:flex;align-items:center;gap:8px;}
+  .file-list-item:last-child{border-bottom:none;}
+  .fi-icon{color:var(--accent);opacity:0.6;font-size:10px;}
+  .file-list::-webkit-scrollbar{width:4px;}.file-list::-webkit-scrollbar-thumb{background:var(--border);}
+  .webcam-wrap{position:relative;background:#000;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+  #webcamVideo{width:100%;max-height:320px;object-fit:cover;display:block;}
+  .webcam-overlay{position:absolute;inset:0;pointer-events:none;}
+  .webcam-corner{position:absolute;width:24px;height:24px;}
+  .wc-tl{top:8px;left:8px;border-top:2px solid var(--accent);border-left:2px solid var(--accent);}
+  .wc-tr{top:8px;right:8px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);}
+  .wc-bl{bottom:8px;left:8px;border-bottom:2px solid var(--accent);border-left:2px solid var(--accent);}
+  .wc-br{bottom:8px;right:8px;border-bottom:2px solid var(--accent);border-right:2px solid var(--accent);}
+  .webcam-status{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);border:1px solid var(--accent);padding:3px 10px;font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;}
+  .snapshot-preview{display:none;margin-top:10px;position:relative;}
+  .snapshot-preview img{width:100%;max-height:220px;object-fit:contain;border:1px solid var(--border);}
+  #webcamCanvas{display:none;}
+  .btn{width:100%;padding:16px;background:transparent;border:1px solid var(--accent);color:var(--accent);font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:5px;cursor:pointer;margin-top:14px;position:relative;overflow:hidden;transition:all 0.3s;}
+  .btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),var(--accent3));opacity:0;transition:opacity 0.3s;}
+  .btn:hover::before{opacity:0.15;}.btn:hover{box-shadow:var(--glow);color:#fff;}.btn:disabled{opacity:0.3;cursor:not-allowed;}
+  .btn span{position:relative;z-index:1;}
+  .btn-secondary{border-color:var(--border);color:var(--text-dim);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;}
+  .btn-secondary:hover{border-color:var(--accent2);color:var(--accent2);box-shadow:var(--glow2);}
+  .btn-cam{border-color:var(--accent2);color:var(--accent2);}
+  .btn-cam::before{background:linear-gradient(135deg,var(--accent2),var(--accent3));}.btn-cam:hover{box-shadow:var(--glow2);}
+  .btn-batch{border-color:var(--accent3);color:var(--accent3);}
+  .btn-batch::before{background:linear-gradient(135deg,var(--accent3),var(--accent));}.btn-batch:hover{box-shadow:0 0 20px rgba(123,47,255,0.4);}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+  .status-panel{padding:20px;display:none;}
+  .status-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .status-dot{width:10px;height:10px;border-radius:50%;background:var(--text-dim);flex-shrink:0;}
+  .status-dot.running{background:var(--accent);box-shadow:var(--glow);animation:blink 1s ease-in-out infinite;}
+  .status-dot.done{background:#00ff88;box-shadow:0 0 10px rgba(0,255,136,0.5);}
+  .status-dot.error{background:var(--accent2);box-shadow:var(--glow2);}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+  .status-text{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);letter-spacing:2px;}
+  .progress-wrap{margin:12px 0;background:var(--bg);border:1px solid var(--border);height:4px;border-radius:2px;overflow:hidden;}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0;transition:width 0.5s;box-shadow:var(--glow);}
+  .progress-bar.indeterminate{width:40%;animation:slide 1.5s ease-in-out infinite;}
+  @keyframes slide{0%{transform:translateX(-150%)}100%{transform:translateX(350%)}}
+  .log-box{background:#020508;border:1px solid var(--border);padding:10px 14px;font-family:'Space Mono',monospace;font-size:10px;color:#3a7050;max-height:140px;overflow-y:auto;line-height:1.9;}
+  .log-box::-webkit-scrollbar{width:4px;}.log-box::-webkit-scrollbar-thumb{background:var(--border);}
+  .log-line::before{content:'> ';color:var(--accent);opacity:0.5;}
+  .result-panel{padding:20px;display:none;}
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .result-stat{background:var(--bg);border:1px solid var(--border);padding:12px 16px;}
+  .result-stat-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--text-dim);margin-bottom:4px;}
+  .result-stat-value{font-family:'Bebas Neue',cursive;font-size:20px;color:var(--accent);letter-spacing:2px;}
+  .batch-results{margin-top:14px;}
+  .batch-result-item{background:var(--bg);border:1px solid var(--border);padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .batch-result-item.success{border-left:3px solid #00ff88;}.batch-result-item.fail{border-left:3px solid var(--accent2);}
+  .batch-result-name{font-family:'Space Mono',monospace;font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .batch-result-status{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;flex-shrink:0;}
+  .batch-result-status.ok{color:#00ff88;}.batch-result-status.err{color:var(--accent2);}
+  .batch-dl{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);text-decoration:none;flex-shrink:0;padding:4px 10px;border:1px solid rgba(0,229,255,0.3);}
+  .batch-dl:hover{border-color:var(--accent);background:rgba(0,229,255,0.05);}
+  .viewer-section{margin-top:16px;}
+  .viewer-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);opacity:0.6;margin-bottom:10px;}
+  .viewer-frame-wrap{position:relative;width:100%;background:#000;border:1px solid var(--border);border-radius:2px;overflow:hidden;}
+  #splatFrame{width:100%;height:480px;border:none;display:none;}
+  .viewer-placeholder{width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(0,0,0,0.4);}
+  .viewer-placeholder-icon{font-size:32px;opacity:0.3;}
+  .viewer-placeholder-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:2px;text-align:center;line-height:1.8;}
+  .viewer-placeholder-text a{color:var(--accent);text-decoration:none;}
+  .open-viewer-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,rgba(0,229,255,0.08),rgba(123,47,255,0.08));border:1px solid var(--accent);color:#fff;font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:4px;text-align:center;text-decoration:none;margin-top:10px;transition:all 0.3s;cursor:pointer;}
+  .open-viewer-btn:hover{background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(123,47,255,0.15));box-shadow:var(--glow);}
+  .btn-download{display:block;width:100%;padding:14px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-align:center;text-decoration:none;margin-top:8px;transition:all 0.3s;cursor:pointer;}
+  .btn-download:hover{border-color:var(--accent2);color:var(--accent2);}
+  .error-msg{background:rgba(255,61,107,0.08);border:1px solid rgba(255,61,107,0.3);padding:12px 16px;font-family:'Space Mono',monospace;font-size:11px;color:var(--accent2);margin-top:12px;display:none;}
+  footer{text-align:center;padding:24px 0;font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:2px;border-top:1px solid var(--border);margin-top:20px;}
+  footer span{color:var(--accent2);}
+
+  .splat-viewer-wrap{position:relative;width:100%;height:480px;background:#020508;border:1px solid var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+  .splat-canvas{width:100%;height:100%;display:block;cursor:grab;}
+  .splat-canvas:active{cursor:grabbing;}
+  .splat-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#020508;}
+  .splat-loading-bar{width:200px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .splat-loading-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));width:0%;transition:width 0.3s;}
+  .splat-loading-text{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;}
+  .splat-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.6);border:1px solid rgba(0,229,255,0.2);padding:4px 12px;font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:2px;white-space:nowrap;pointer-events:none;}
+  .conv-log{background:#020508;border:1px solid var(--border);padding:10px 14px;font-family:'Space Mono',monospace;font-size:10px;color:#3a9060;max-height:220px;overflow-y:auto;line-height:1.9;margin-top:14px;display:none;}
+  .conv-log::-webkit-scrollbar{width:4px;}.conv-log::-webkit-scrollbar-thumb{background:var(--border);}
+  .conv-result{display:none;margin-top:14px;}
+  .conv-path{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);margin-top:10px;padding:8px 12px;background:var(--bg);border:1px solid var(--border);}
+</style>
+<script src="/static/splat.js">
+  // ── INLINE SPLAT VIEWER ────────────────────────────────────────
+  let _viewer = null;
+  async function loadSplatViewer(url) {
+    const loading = document.getElementById('splatLoading');
+    const fill    = document.getElementById('splatLoadFill');
+    const canvas  = document.getElementById('splatCanvas');
+    loading.style.display = 'flex';
+    fill.style.width = '0%';
+
+    try {
+      // Fetch with progress
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+      const total  = parseInt(res.headers.get('Content-Length') || '0');
+      const reader = res.body.getReader();
+      const chunks = [];
+      let received = 0;
+      while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        if (total > 0) fill.style.width = Math.round(received/total*90)+'%';
+      }
+      fill.style.width = '95%';
+      const buffer = await new Blob(chunks).arrayBuffer();
+      fill.style.width = '100%';
+
+      const splatData = parsePLY(buffer);
+
+      if (!_viewer) _viewer = new SplatViewer(canvas);
+      _viewer.load(splatData);
+      loading.style.display = 'none';
+    } catch(e) {
+      loading.innerHTML = '<div style="font-family:\'Space Mono\',monospace;font-size:11px;color:var(--accent2);text-align:center;padding:20px">⚠ Could not load viewer<br><span style=\"opacity:0.5;font-size:9px\">'+e.message+'</span></div>';
+    }
+  }
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <span class="logo-eyebrow">3D Gaussian Splatting</span>
+    <h1>The Splat Guy</h1>
+    <p class="tagline">Upload a photo. Get a <span>3D universe</span>. In seconds.</p>
+  </header>
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('upload')">📁 Upload Image</div>
+    <div class="tab" onclick="switchTab('batch')">📂 Batch Folder</div>
+    <div class="tab" onclick="switchTab('webcam')">📷 Webcam</div>
+    <div class="tab tc" onclick="switchTab('converter')">🔧 PLY Converter</div>
+  </div>
+
+  <!-- UPLOAD -->
+  <div class="tab-content active" id="tab-upload">
+    <div class="panel"><div class="panel-label">// Single Image</div>
+      <div class="panel-body">
+        <div class="drop-zone" id="dropZone"><span class="drop-icon">🌐</span><div class="drop-title">Drop Your Image Here</div><p class="drop-sub">or <span>click to browse</span> &nbsp;·&nbsp; JPG, PNG, WEBP</p></div>
+        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp">
+        <div class="preview-wrap" id="previewWrap"><span class="preview-label">INPUT // READY</span><img id="previewImg" src="" alt=""></div>
+        <button class="btn" id="splatBtn" disabled><span>⚡ Generate Splat</span></button>
+        <div class="error-msg" id="uploadError"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BATCH -->
+  <div class="tab-content" id="tab-batch">
+    <div class="panel"><div class="panel-label">// Batch Folder Processing</div>
+      <div class="panel-body">
+        <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);margin-bottom:14px;line-height:1.8;">Enter a folder path on your PC. All images inside will be processed and a separate .ply generated for each one.</p>
+        <div class="folder-input-wrap">
+          <input class="folder-input" id="folderInput" type="text" placeholder="e.g.  E:\my_photos\holiday">
+          <button class="btn-scan" id="scanBtn">SCAN FOLDER</button>
+        </div>
+        <div class="file-list" id="fileList">
+          <div class="file-list-header"><span>IMAGES FOUND</span><span id="fileCount">0</span></div>
+          <div id="fileListItems"></div>
+        </div>
+        <button class="btn btn-batch" id="batchBtn" disabled><span>⚡ Process All Images</span></button>
+        <div class="error-msg" id="batchError"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEBCAM -->
+  <div class="tab-content" id="tab-webcam">
+    <div class="panel"><div class="panel-label">// Live Camera</div>
+      <div class="panel-body">
+        <div class="webcam-wrap">
+          <video id="webcamVideo" autoplay playsinline muted></video>
+          <div class="webcam-overlay"><div class="webcam-corner wc-tl"></div><div class="webcam-corner wc-tr"></div><div class="webcam-corner wc-bl"></div><div class="webcam-corner wc-br"></div></div>
+          <div class="webcam-status" id="webcamStatus">CAMERA OFF</div>
+        </div>
+        <canvas id="webcamCanvas"></canvas>
+        <div class="snapshot-preview" id="snapshotPreview"><span class="preview-label">SNAPSHOT // READY</span><img id="snapshotImg" src="" alt=""></div>
+        <div class="btn-row">
+          <button class="btn btn-cam" id="startCamBtn"><span>▶ Start Camera</span></button>
+          <button class="btn btn-cam" id="snapshotBtn" disabled><span>📸 Snapshot</span></button>
+        </div>
+        <button class="btn" id="splatWebcamBtn" disabled><span>⚡ Generate Splat from Snapshot</span></button>
+        <div class="error-msg" id="webcamError"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLY CONVERTER -->
+  <div class="tab-content" id="tab-converter">
+    <div class="panel" style="border-color:rgba(123,47,255,0.4)">
+      <div class="panel-label" style="color:var(--accent3);">// PLY Converter — SHARP → Postshot</div>
+      <div class="panel-body">
+        <p style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);margin-bottom:18px;line-height:1.9;">
+          SHARP outputs non-standard PLY elements (<span style="color:var(--accent)">extrinsic</span>, <span style="color:var(--accent)">intrinsic</span>) that Postshot rejects.
+          Drop your .ply files below to strip them and save clean, Postshot-compatible versions.
+        </p>
+        <div class="drop-zone" id="plyDropZone" style="border-color:rgba(123,47,255,0.4)">
+          <span class="drop-icon">🗂️</span>
+          <div class="drop-title">Drop .PLY Files Here</div>
+          <p class="drop-sub">or <span style="color:var(--accent3)">click to browse</span> &nbsp;·&nbsp; multiple files supported</p>
+        </div>
+        <input type="file" id="plyFileInput" accept=".ply" multiple style="display:none">
+        <div class="file-list" id="plyFileList">
+          <div class="file-list-header" style="color:var(--accent3)"><span>QUEUED FILES</span><span id="plyFileCount">0</span></div>
+          <div id="plyFileListItems"></div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent3);margin-bottom:8px;opacity:0.8">OUTPUT FOLDER (OPTIONAL)</div>
+          <div class="folder-input-wrap">
+            <input class="folder-input" id="plyOutputFolder" type="text" placeholder="Leave blank to auto-save in outputs\converted_xxx  —  or enter e.g.  E:\converted_splats">
+          </div>
+        </div>
+        <button class="btn btn-batch" id="convertBtn" disabled><span>⚡ Convert All Files</span></button>
+        <button class="btn btn-secondary" id="clearPlyBtn" style="margin-top:8px"><span>✕ Clear Queue</span></button>
+        <div class="conv-log" id="converterLog"></div>
+        <div class="conv-result" id="converterResult">
+          <div class="result-grid">
+            <div class="result-stat"><div class="result-stat-label">Converted</div><div class="result-stat-value" id="convOk" style="color:#00ff88">—</div></div>
+            <div class="result-stat"><div class="result-stat-label">Failed</div><div class="result-stat-value" id="convFail" style="color:var(--accent2)">—</div></div>
+          </div>
+          <div class="conv-path" id="convOutputPath"></div>
+        </div>
+        <div class="error-msg" id="converterError"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="panel status-panel" id="statusPanel">
+    <div class="panel-label">// Processing</div>
+    <div class="panel-body" style="padding-top:12px">
+      <div class="status-header"><div class="status-dot running" id="statusDot"></div><div class="status-text" id="statusText">INITIALIZING...</div></div>
+      <div class="progress-wrap"><div class="progress-bar indeterminate" id="progressBar"></div></div>
+      <div class="log-box" id="logBox"><div class="log-line">Waiting for model output...</div></div>
+    </div>
+  </div>
+
+  <!-- RESULT single -->
+  <div class="panel result-panel" id="resultPanel">
+    <div class="panel-label">// Splat Generated</div>
+    <div class="panel-body" style="padding-top:12px">
+      <div class="result-grid">
+        <div class="result-stat"><div class="result-stat-label">Status</div><div class="result-stat-value" style="color:#00ff88">COMPLETE</div></div>
+        <div class="result-stat"><div class="result-stat-label">File</div><div class="result-stat-value" id="plyName" style="font-size:14px">—</div></div>
+      </div>
+
+      <!-- INLINE 3D VIEWER -->
+      <div style="margin-top:18px;">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent);opacity:0.6;margin-bottom:10px;">// 3D VIEWER</div>
+        <div class="splat-viewer-wrap" id="splatViewerWrap">
+          <canvas class="splat-canvas" id="splatCanvas"></canvas>
+          <div class="splat-loading" id="splatLoading">
+            <div class="splat-loading-text">LOADING SPLAT...</div>
+            <div class="splat-loading-bar"><div class="splat-loading-fill" id="splatLoadFill"></div></div>
+          </div>
+          <div class="splat-hint">drag to orbit &nbsp;·&nbsp; scroll to zoom &nbsp;·&nbsp; right-drag to dolly</div>
+        </div>
+
+        <!-- SuperSplat + download -->
+        <button class="open-viewer-btn" id="openSuperSplatBtn" style="margin-top:0;text-align:left;padding:14px 20px;display:flex;align-items:center;gap:14px;">
+          <span style="font-size:20px">🔭</span>
+          <span style="flex:1">
+            <span style="display:block;font-family:'Bebas Neue',cursive;font-size:17px;letter-spacing:4px;">Open in SuperSplat</span>
+            <span style="display:block;font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:2px;margin-top:2px;">Downloads .ply + opens SuperSplat — drag the file in</span>
+          </span>
+        </button>
+
+        <!-- Postshot hint -->
+        <div style="background:rgba(123,47,255,0.06);border:1px solid rgba(123,47,255,0.3);padding:10px 16px;margin-top:8px;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:16px">⚡</span>
+          <span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);line-height:1.7;">
+            For <span style="color:var(--accent3)">Postshot</span> — use the <span style="color:var(--accent3)">PLY Converter</span> tab first to strip non-standard elements.
+          </span>
+        </div>
+
+        <a class="btn-download" id="downloadBtn" href="#" style="margin-top:8px;">⬇ Download .PLY File</a>
+      </div>
+
+      <button class="btn btn-secondary" id="newBtn" style="margin-top:14px">↩ Process Another Image</button>
+    </div>
+  </div>
+
+  <!-- RESULT batch -->
+  <div class="panel result-panel" id="batchResultPanel">
+    <div class="panel-label">// Batch Complete</div>
+    <div class="panel-body" style="padding-top:12px">
+      <div class="result-grid">
+        <div class="result-stat"><div class="result-stat-label">Status</div><div class="result-stat-value" style="color:#00ff88">COMPLETE</div></div>
+        <div class="result-stat"><div class="result-stat-label">Generated</div><div class="result-stat-value" id="batchCount">—</div></div>
+      </div>
+      <div class="batch-results" id="batchResultsList"></div>
+      <button class="btn btn-secondary" id="newBatchBtn" style="margin-top:14px">↩ Process Another Folder</button>
+    </div>
+  </div>
+
+</div>
+<footer>The Splat Guy &nbsp;·&nbsp; Powered by <span>Apple SHARP</span></footer>
+<script>
+  const TABS=['upload','batch','webcam','converter'];
+  function switchTab(n){
+    document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',TABS[i]===n));
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+    document.getElementById('tab-'+n).classList.add('active');
+  }
+  function dimTabs(d){TABS.forEach(n=>{document.getElementById('tab-'+n).style.opacity=d?'0.4':'1';});}
+
+  // UPLOAD
+  const dropZone=document.getElementById('dropZone'),fileInput=document.getElementById('fileInput'),previewWrap=document.getElementById('previewWrap'),previewImg=document.getElementById('previewImg'),splatBtn=document.getElementById('splatBtn');
+  let selectedFile=null;
+  dropZone.addEventListener('click',()=>fileInput.click());
+  dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-over');});
+  dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0]);});
+  fileInput.addEventListener('change',()=>{if(fileInput.files[0])handleFile(fileInput.files[0]);});
+  function handleFile(f){selectedFile=f;const r=new FileReader();r.onload=e=>{previewImg.src=e.target.result;previewWrap.style.display='block';};r.readAsDataURL(f);splatBtn.disabled=false;document.getElementById('uploadError').style.display='none';}
+  splatBtn.addEventListener('click',()=>{if(!selectedFile)return;const fd=new FormData();fd.append('image',selectedFile);startSingleJob(fetch('/upload',{method:'POST',body:fd}));});
+
+  // BATCH
+  const folderInput=document.getElementById('folderInput'),scanBtn=document.getElementById('scanBtn'),fileList=document.getElementById('fileList'),fileListItems=document.getElementById('fileListItems'),fileCount=document.getElementById('fileCount'),batchBtn=document.getElementById('batchBtn'),batchError=document.getElementById('batchError');
+  let scannedFolder=null;
+  scanBtn.addEventListener('click',async()=>{
+    const folder=folderInput.value.trim();if(!folder)return;
+    batchError.style.display='none';scanBtn.textContent='SCANNING...';
+    try{const res=await fetch('/scan_folder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({folder})});const data=await res.json();if(data.error)throw new Error(data.error);scannedFolder=data.folder;fileCount.textContent=data.count;fileListItems.innerHTML=data.images.map(f=>`<div class="file-list-item"><span class="fi-icon">▸</span>${f}</div>`).join('');fileList.style.display='block';batchBtn.disabled=false;}
+    catch(e){batchError.textContent='⚠ '+e.message;batchError.style.display='block';fileList.style.display='none';batchBtn.disabled=true;}
+    scanBtn.textContent='SCAN FOLDER';
+  });
+  batchBtn.addEventListener('click',()=>{if(scannedFolder)startBatchJob(scannedFolder);});
+
+  // WEBCAM
+  const webcamVideo=document.getElementById('webcamVideo'),webcamCanvas=document.getElementById('webcamCanvas'),snapshotPreview=document.getElementById('snapshotPreview'),snapshotImg=document.getElementById('snapshotImg'),startCamBtn=document.getElementById('startCamBtn'),snapshotBtn=document.getElementById('snapshotBtn'),splatWebcamBtn=document.getElementById('splatWebcamBtn'),webcamStatus=document.getElementById('webcamStatus');
+  let webcamStream=null,snapshotDataUrl=null;
+  startCamBtn.addEventListener('click',async()=>{
+    if(webcamStream){webcamStream.getTracks().forEach(t=>t.stop());webcamStream=null;webcamVideo.srcObject=null;webcamStatus.textContent='CAMERA OFF';webcamStatus.style.color='var(--accent)';startCamBtn.querySelector('span').textContent='▶ Start Camera';snapshotBtn.disabled=true;return;}
+    try{webcamStream=await navigator.mediaDevices.getUserMedia({video:{width:1280,height:720},audio:false});webcamVideo.srcObject=webcamStream;webcamStatus.textContent='● LIVE';webcamStatus.style.color='#00ff88';startCamBtn.querySelector('span').textContent='⏹ Stop Camera';snapshotBtn.disabled=false;}
+    catch(e){const err=document.getElementById('webcamError');err.textContent='⚠ '+e.message;err.style.display='block';}
+  });
+  snapshotBtn.addEventListener('click',()=>{webcamCanvas.width=webcamVideo.videoWidth;webcamCanvas.height=webcamVideo.videoHeight;webcamCanvas.getContext('2d').drawImage(webcamVideo,0,0);snapshotDataUrl=webcamCanvas.toDataURL('image/jpeg',0.92);snapshotImg.src=snapshotDataUrl;snapshotPreview.style.display='block';splatWebcamBtn.disabled=false;});
+  splatWebcamBtn.addEventListener('click',()=>{if(!snapshotDataUrl)return;startSingleJob(fetch('/upload_webcam',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:snapshotDataUrl})}));});
+
+  // SHARED JOB LOGIC
+  const statusPanel=document.getElementById('statusPanel'),resultPanel=document.getElementById('resultPanel'),batchResultPanel=document.getElementById('batchResultPanel'),statusDot=document.getElementById('statusDot'),statusText=document.getElementById('statusText'),logBox=document.getElementById('logBox'),plyName=document.getElementById('plyName'),downloadBtn=document.getElementById('downloadBtn');
+  let currentJobId=null,currentPlyName=null;
+  let pollInterval=null;
+  async function startSingleJob(fp){
+    dimTabs(true);statusPanel.style.display='block';resultPanel.style.display='none';batchResultPanel.style.display='none';statusDot.className='status-dot running';statusText.textContent='UPLOADING...';logBox.innerHTML='<div class="log-line">Starting SHARP engine...</div>';
+    try{const res=await fp;const data=await res.json();if(data.error)throw new Error(data.error);statusText.textContent='SHARP RUNNING...';pollSingle(data.job_id);}catch(e){showError(e.message);}
+  }
+  function pollSingle(id){
+    pollInterval=setInterval(async()=>{
+      try{const data=await(await fetch('/status/'+id)).json();
+      if(data.log&&data.log.length>0){logBox.innerHTML=data.log.map(l=>`<div class="log-line">${l}</div>`).join('');logBox.scrollTop=logBox.scrollHeight;}
+      if(data.status==='done'){
+          clearInterval(pollInterval);
+          statusPanel.style.display='none';
+          resultPanel.style.display='block';
+          dimTabs(false);
+          plyName.textContent=data.ply||'output.ply';
+          downloadBtn.href='/download/'+id+'/'+data.ply;
+          document.getElementById('openSuperSplatBtn').onclick=()=>{downloadBtn.click();setTimeout(()=>window.open('https://playcanvas.com/supersplat/editor','_blank'),300);};
+          currentJobId=id;currentPlyName=data.ply;
+          loadSplatViewer('/outputs/'+id+'/'+data.ply);
+        }
+      else if(data.status==='error'){clearInterval(pollInterval);showError(data.error||'Unknown error');}}catch(e){}
+    },1500);
+  }
+  async function startBatchJob(folder){
+    dimTabs(true);statusPanel.style.display='block';resultPanel.style.display='none';batchResultPanel.style.display='none';statusDot.className='status-dot running';statusText.textContent='STARTING BATCH...';logBox.innerHTML='<div class="log-line">Queuing images...</div>';
+    try{const res=await fetch('/batch',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({folder})});const data=await res.json();if(data.error)throw new Error(data.error);statusText.textContent='PROCESSING '+data.total+' IMAGES...';pollBatch(data.job_id,data.total);}
+    catch(e){batchError.textContent='⚠ '+e.message;batchError.style.display='block';statusPanel.style.display='none';dimTabs(false);}
+  }
+  function pollBatch(id,total){
+    pollInterval=setInterval(async()=>{
+      try{const data=await(await fetch('/status/'+id)).json();const done=(data.results||[]).length;const pct=total>0?Math.round(done/total*100):0;statusText.textContent=data.current||'PROCESSING... '+done+'/'+total;document.getElementById('progressBar').className='progress-bar';document.getElementById('progressBar').style.width=pct+'%';
+      if(data.log&&data.log.length>0){logBox.innerHTML=data.log.slice(-20).map(l=>`<div class="log-line">${l}</div>`).join('');logBox.scrollTop=logBox.scrollHeight;}
+      if(data.status==='done'){clearInterval(pollInterval);statusPanel.style.display='none';dimTabs(false);showBatchResults(id,data.results,total);}
+      else if(data.status==='error'){clearInterval(pollInterval);showError(data.error||'Unknown error');}}catch(e){}
+    },1500);
+  }
+  function showBatchResults(id,results,total){
+    batchResultPanel.style.display='block';const ok=results.filter(r=>r.status==='done').length;document.getElementById('batchCount').textContent=ok+' / '+total;
+    document.getElementById('batchResultsList').innerHTML=results.map(r=>`<div class="batch-result-item ${r.status==='done'?'success':'fail'}"><span class="batch-result-name">${r.image}</span><span class="batch-result-status ${r.status==='done'?'ok':'err'}">${r.status==='done'?'✓ DONE':'✗ FAILED'}</span>${r.status==='done'?`<a class="batch-dl" href="/download_batch/${id}/${r.subdir}/${r.ply}" download>⬇ PLY</a>`:''}</div>`).join('');
+  }
+  function showError(msg){clearInterval(pollInterval);statusPanel.style.display='none';dimTabs(false);const e=document.getElementById('uploadError');e.textContent='⚠ ERROR: '+msg;e.style.display='block';}
+  document.getElementById('newBtn').addEventListener('click',()=>{resultPanel.style.display='none';previewWrap.style.display='none';previewImg.src='';selectedFile=null;splatBtn.disabled=true;fileInput.value='';currentJobId=null;currentPlyName=null;});
+  document.getElementById('newBatchBtn').addEventListener('click',()=>{batchResultPanel.style.display='none';fileList.style.display='none';folderInput.value='';batchBtn.disabled=true;scannedFolder=null;});
+
+  // PLY CONVERTER
+  const plyDropZone=document.getElementById('plyDropZone'),plyFileInput=document.getElementById('plyFileInput'),plyFileList=document.getElementById('plyFileList'),plyFileListItems=document.getElementById('plyFileListItems'),plyFileCount=document.getElementById('plyFileCount'),convertBtn=document.getElementById('convertBtn'),clearPlyBtn=document.getElementById('clearPlyBtn'),converterLog=document.getElementById('converterLog'),converterResult=document.getElementById('converterResult'),converterError=document.getElementById('converterError');
+  let plyQueue=[];
+  plyDropZone.addEventListener('click',()=>plyFileInput.click());
+  plyDropZone.addEventListener('dragover',e=>{e.preventDefault();plyDropZone.classList.add('drag-over');});
+  plyDropZone.addEventListener('dragleave',()=>plyDropZone.classList.remove('drag-over'));
+  plyDropZone.addEventListener('drop',e=>{e.preventDefault();plyDropZone.classList.remove('drag-over');addPlyFiles([...e.dataTransfer.files].filter(f=>f.name.toLowerCase().endsWith('.ply')));});
+  plyFileInput.addEventListener('change',()=>{addPlyFiles([...plyFileInput.files]);plyFileInput.value='';});
+  function addPlyFiles(files){files.forEach(f=>{if(!plyQueue.find(q=>q.name===f.name))plyQueue.push(f);});renderPlyQueue();}
+  function renderPlyQueue(){
+    plyFileCount.textContent=plyQueue.length;
+    plyFileListItems.innerHTML=plyQueue.map((f,i)=>`<div class="file-list-item"><span class="fi-icon">▸</span><span style="flex:1">${f.name}</span><span style="font-size:10px;color:var(--text-dim)">${(f.size/1024).toFixed(0)} KB</span><span onclick="removePly(${i})" style="cursor:pointer;color:var(--accent2);padding-left:12px;font-size:13px">✕</span></div>`).join('');
+    plyFileList.style.display=plyQueue.length?'block':'none';
+    convertBtn.disabled=plyQueue.length===0;
+    converterResult.style.display='none';converterLog.style.display='none';converterError.style.display='none';
+  }
+  function removePly(i){plyQueue.splice(i,1);renderPlyQueue();}
+  clearPlyBtn.addEventListener('click',()=>{plyQueue=[];renderPlyQueue();});
+  convertBtn.addEventListener('click',async()=>{
+    if(!plyQueue.length)return;
+    convertBtn.disabled=true;convertBtn.querySelector('span').textContent='CONVERTING...';
+    converterLog.style.display='block';converterLog.innerHTML='<div class="log-line">Starting conversion...</div>';
+    converterResult.style.display='none';converterError.style.display='none';
+    const fd=new FormData();
+    plyQueue.forEach(f=>fd.append('files',f));
+    const out=document.getElementById('plyOutputFolder').value.trim();
+    if(out)fd.append('output_folder',out);
+    try{
+      const res=await fetch('/convert_ply',{method:'POST',body:fd});
+      const data=await res.json();if(data.error)throw new Error(data.error);
+      converterLog.innerHTML=data.log.map(l=>`<div class="log-line">${l}</div>`).join('');converterLog.scrollTop=converterLog.scrollHeight;
+      document.getElementById('convOk').textContent=data.ok+' / '+data.total;
+      document.getElementById('convFail').textContent=data.failed;
+      document.getElementById('convOutputPath').textContent='📁 Saved to: '+data.output_dir;
+      converterResult.style.display='block';
+    }catch(e){converterError.textContent='⚠ '+e.message;converterError.style.display='block';}
+    convertBtn.disabled=false;convertBtn.querySelector('span').textContent='⚡ Convert All Files';
+  });
+</script>
+</body>
+</html>
