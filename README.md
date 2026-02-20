@@ -4,6 +4,8 @@ A WebUI wrapper for [Apple SHARP](https://github.com/apple/ml-sharp) — single 
 
 Built by [Stephen Ryan](https://www.flamered.co.uk) / [@flame_red_images](https://instagram.com/flame_red_images)
 
+![The Splat Guy — Upload Image](screenshots/screenshot-upload.png)
+
 ---
 
 ## What It Does
@@ -15,6 +17,18 @@ SHARP (Single-image Human-centric Articulated Reconstruction and Processing) is 
 - **Webcam** — snapshot from your camera or OBS virtual camera directly to splat
 - **PLY Converter** — strips non-standard elements (`extrinsic`, `intrinsic`) from SHARP output so files load correctly in [Postshot](https://www.jawset.com/)
 - **Inline 3D Viewer** — preview your splat directly in the browser after generation
+
+---
+
+## Screenshots
+
+| Upload Image | Batch Folder |
+|---|---|
+| ![Upload](screenshots/screenshot-upload.png) | ![Batch](screenshots/screenshot-batch.png) |
+
+| Webcam | PLY Converter |
+|---|---|
+| ![Webcam](screenshots/screenshot-webcam.png) | ![PLY Converter](screenshots/screenshot-ply-converter.png) |
 
 ---
 
@@ -48,11 +62,11 @@ sharp --help
 ### 2. Clone or download this repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/the-splat-guy.git
+git clone https://github.com/FlameredImages/the-splat-guy.git
 cd the-splat-guy
 ```
 
-Or download the ZIP and extract it.
+Or click the green **Code** button above → **Download ZIP** and extract it.
 
 ### 3. Install dependencies
 
@@ -83,6 +97,7 @@ the-splat-guy/
 │   └── index.html          # Full web UI (single file, no build step)
 ├── static/
 │   └── splat.js            # Self-hosted WebGL Gaussian Splat viewer
+├── screenshots/            # Repo screenshots
 ├── uploads/                # Created automatically at runtime
 └── outputs/                # Generated .ply files stored here
 ```
@@ -128,18 +143,6 @@ The built-in WebGL viewer (`static/splat.js`) is a minimal custom renderer — i
 - Right-drag to dolly
 
 For more advanced viewing, the **Open in SuperSplat** button downloads the `.ply` and opens [SuperSplat](https://playcanvas.com/supersplat/editor) — drag the downloaded file into the browser window.
-
----
-
-## Building a Standalone .exe
-
-A PyInstaller build script is included. Run:
-
-```bash
-build_exe.bat
-```
-
-This produces `dist/TheSplatGuy.exe` — a single executable that bundles Flask, the templates, and the viewer. No Python installation required to run.
 
 ---
 
