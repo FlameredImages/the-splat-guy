@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invoice — The Splat Guy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050810;--panel:#0d1526;--border:#1a2a4a;--accent:#00e5ff;--accent2:#ff3d6b;--accent3:#7b2fff;--text:#c8d8f0;--text-dim:#4a6080;--glow:0 0 20px rgba(0,229,255,0.3);--glow2:0 0 20px rgba(255,61,107,0.3);--green:#00ff88;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:0;}
+
+  .page{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+
+  /* HEADER */
+  header{text-align:center;padding:32px 0 20px;position:relative;margin-bottom:8px;}
+  .corner{position:absolute;width:20px;height:20px;opacity:0.5;}
+  .corner-tl{top:0;left:0;border-top:2px solid var(--accent);border-left:2px solid var(--accent);}
+  .corner-tr{top:0;right:0;border-top:2px solid var(--accent);border-right:2px solid var(--accent);}
+  .logo-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:6px;color:var(--accent);opacity:0.7;display:block;margin-bottom:6px;}
+  h1{font-family:'Bebas Neue',cursive;font-size:clamp(48px,8vw,80px);line-height:0.9;letter-spacing:4px;background:linear-gradient(135deg,#fff 0%,var(--accent) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(0,229,255,0.4));}
+  .invoice-badge{display:inline-block;margin-top:10px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--accent2);border:1px solid rgba(255,61,107,0.4);padding:4px 16px;background:rgba(255,61,107,0.06);}
+
+  /* DIVIDER */
+  .divider{display:flex;align-items:center;gap:12px;margin:16px 0;}
+  .divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);}
+  .divider-dot{width:4px;height:4px;background:var(--accent);border-radius:50%;box-shadow:var(--glow);}
+
+  /* META ROW */
+  .meta-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .meta-block{background:var(--panel);border:1px solid var(--border);padding:16px 20px;position:relative;}
+  .meta-block::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .meta-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--accent);opacity:0.6;margin-bottom:8px;}
+  .meta-value{font-family:'Rajdhani',sans-serif;font-size:15px;color:var(--text);line-height:1.7;}
+  .meta-value strong{font-family:'Space Mono',monospace;font-size:13px;color:#fff;display:block;}
+  .meta-value .dim{color:var(--text-dim);font-size:13px;}
+
+  /* INVOICE NUMBER / DATE panel */
+  .invoice-info{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+  .info-stat{background:var(--panel);border:1px solid var(--border);padding:14px 18px;position:relative;}
+  .info-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent3),transparent);opacity:0.4;}
+  .info-stat-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--accent3);opacity:0.7;margin-bottom:4px;}
+  .info-stat-value{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:var(--accent);}
+
+  /* LINE ITEMS TABLE */
+  .table-wrap{background:var(--panel);border:1px solid var(--border);position:relative;margin-bottom:20px;}
+  .table-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0.4;}
+  .table-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--accent);padding:14px 20px 0;opacity:0.6;}
+  table{width:100%;border-collapse:collapse;margin-top:10px;}
+  thead tr{border-bottom:1px solid var(--border);}
+  th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--text-dim);padding:10px 20px;text-align:left;font-weight:400;}
+  th.right{text-align:right;}
+  tbody tr{border-bottom:1px solid rgba(26,42,74,0.5);transition:background 0.15s;}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:rgba(0,229,255,0.03);}
+  td{font-family:'Rajdhani',sans-serif;font-size:15px;color:var(--text);padding:13px 20px;vertical-align:top;}
+  td.right{text-align:right;font-family:'Space Mono',monospace;font-size:12px;}
+  td.desc-sub{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);display:block;margin-top:2px;letter-spacing:1px;}
+  .qty-cell{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-dim);}
+
+  /* TOTALS */
+  .totals-wrap{display:flex;justify-content:flex-end;margin-bottom:20px;}
+  .totals{min-width:320px;background:var(--panel);border:1px solid var(--border);position:relative;}
+  .totals::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent3),transparent);opacity:0.4;}
+  .totals-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--accent3);padding:14px 20px 0;opacity:0.6;}
+  .totals-row{display:flex;justify-content:space-between;align-items:center;padding:8px 20px;border-bottom:1px solid rgba(26,42,74,0.5);}
+  .totals-row:last-child{border-bottom:none;}
+  .totals-row-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);}
+  .totals-row-value{font-family:'Space Mono',monospace;font-size:12px;color:var(--text);}
+  .totals-row.grand{background:rgba(0,229,255,0.04);padding:14px 20px;}
+  .totals-row.grand .totals-row-label{color:var(--accent);font-size:11px;letter-spacing:3px;}
+  .totals-row.grand .totals-row-value{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--accent);letter-spacing:2px;filter:drop-shadow(0 0 10px rgba(0,229,255,0.4));}
+
+  /* PAYMENT */
+  .payment-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+  .payment-block{background:var(--panel);border:1px solid var(--border);padding:16px 20px;position:relative;}
+  .payment-block::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:0.4;}
+  .payment-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--accent2);opacity:0.7;margin-bottom:10px;}
+  .payment-detail{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:2;}
+  .payment-detail span{color:var(--text);}
+
+  /* STATUS BADGE */
+  .status-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,255,136,0.4);background:rgba(0,255,136,0.06);padding:6px 16px;margin-bottom:20px;}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(0,255,136,0.5);}
+  .status-text{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--green);}
+
+  /* NOTES */
+  .notes{background:rgba(123,47,255,0.04);border:1px solid rgba(123,47,255,0.3);padding:14px 20px;margin-bottom:20px;}
+  .notes-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--accent3);opacity:0.7;margin-bottom:8px;}
+  .notes-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);line-height:1.9;}
+
+  /* FOOTER */
+  footer{text-align:center;padding:24px 0 0;font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:2px;border-top:1px solid var(--border);}
+  footer span{color:var(--accent2);}
+
+  /* PRINT */
+  @media print{
+    body::before,body::after{display:none;}
+    .page{padding:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <span class="logo-eyebrow">3D Gaussian Splatting</span>
+    <h1>The Splat Guy</h1>
+    <div class="invoice-badge">// INVOICE</div>
+  </header>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
+
+  <!-- Invoice number / date / status -->
+  <div class="invoice-info">
+    <div class="info-stat">
+      <div class="info-stat-label">Invoice No.</div>
+      <div class="info-stat-value">INV-0001</div>
+    </div>
+    <div class="info-stat">
+      <div class="info-stat-label">Issue Date</div>
+      <div class="info-stat-value">02 JUN 2026</div>
+    </div>
+    <div class="info-stat">
+      <div class="info-stat-label">Due Date</div>
+      <div class="info-stat-value">16 JUN 2026</div>
+    </div>
+  </div>
+
+  <!-- From / To -->
+  <div class="meta-row">
+    <div class="meta-block">
+      <div class="meta-label">// From</div>
+      <div class="meta-value">
+        <strong>The Splat Guy</strong>
+        <span class="dim">sr@flamered.co.uk</span><br>
+        <span class="dim">flamered.co.uk</span>
+      </div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-label">// Bill To</div>
+      <div class="meta-value">
+        <strong>Client Name</strong>
+        <span class="dim">client@example.com</span><br>
+        <span class="dim">123 Client Street, City, Country</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Line items -->
+  <div class="table-wrap">
+    <div class="table-label">// Services</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th class="right">Qty</th>
+          <th class="right">Unit Price</th>
+          <th class="right">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            3D Gaussian Splat Generation
+            <span class="desc-sub">Single image → .PLY output via Apple SHARP engine</span>
+          </td>
+          <td class="right qty-cell">1</td>
+          <td class="right">£50.00</td>
+          <td class="right">£50.00</td>
+        </tr>
+        <tr>
+          <td>
+            Batch Processing (Folder)
+            <span class="desc-sub">Up to 20 images, automated pipeline</span>
+          </td>
+          <td class="right qty-cell">1</td>
+          <td class="right">£120.00</td>
+          <td class="right">£120.00</td>
+        </tr>
+        <tr>
+          <td>
+            PLY Converter — SHARP → Postshot
+            <span class="desc-sub">Strip non-standard elements for Postshot compatibility</span>
+          </td>
+          <td class="right qty-cell">5</td>
+          <td class="right">£10.00</td>
+          <td class="right">£50.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Totals -->
+  <div class="totals-wrap">
+    <div class="totals">
+      <div class="totals-label">// Summary</div>
+      <div class="totals-row">
+        <span class="totals-row-label">Subtotal</span>
+        <span class="totals-row-value">£220.00</span>
+      </div>
+      <div class="totals-row">
+        <span class="totals-row-label">VAT (20%)</span>
+        <span class="totals-row-value">£44.00</span>
+      </div>
+      <div class="totals-row grand">
+        <span class="totals-row-label">Total Due</span>
+        <span class="totals-row-value">£264.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment details -->
+  <div class="payment-row">
+    <div class="payment-block">
+      <div class="payment-label">// Payment Details</div>
+      <div class="payment-detail">
+        Bank: <span>Example Bank</span><br>
+        Account: <span>12345678</span><br>
+        Sort Code: <span>00-00-00</span><br>
+        Ref: <span>INV-0001</span>
+      </div>
+    </div>
+    <div class="payment-block">
+      <div class="payment-label">// Payment Status</div>
+      <div style="padding-top:6px">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span class="status-text">Awaiting Payment</span>
+        </div>
+        <div class="payment-detail" style="margin-top:10px">
+          Payment due within <span>14 days</span> of issue.<br>
+          Late payments subject to <span>1.5%/month</span> interest.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div class="notes">
+    <div class="notes-label">// Notes</div>
+    <div class="notes-text">
+      Thank you for using The Splat Guy. All .PLY outputs are retained for 30 days after delivery.
+      For support or queries, contact sr@flamered.co.uk.
+    </div>
+  </div>
+
+</div>
+<footer>The Splat Guy &nbsp;·&nbsp; Powered by <span>Apple SHARP</span></footer>
+</body>
+</html>
