@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scanomatic Labs — Letterhead Header</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fg:       #070A08;
+    --fg-mid:   rgba(7,10,8,0.55);
+    --fg-dim:   rgba(7,10,8,0.28);
+    --green:    #00C060;
+    --green-web:#00E87A;
+    --orange:   #FF7A00;
+    --mono:     'Space Mono', monospace;
+    --sans:     'Space Grotesk', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #d4d4d4;
+    padding: 32px;
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .lh-outer {
+    width: 210mm;
+    background: #fff;
+  }
+  .lh-band {
+    background: var(--fg);
+    padding: 14px 16mm;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lh-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lh-logo-name {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #F0F5F0;
+  }
+  .lh-logo-name em { font-style:normal; color: var(--orange); }
+  .lh-meta {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: rgba(240,245,240,0.4);
+    text-transform: uppercase;
+    text-align: right;
+    line-height: 2;
+  }
+  .lh-green-bar {
+    height: 2px;
+    background: linear-gradient(to right, var(--green-web), var(--orange), transparent 70%);
+  }
+  .lh-body {
+    padding: 12mm 16mm 10mm;
+    min-height: 40mm;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .lh-body-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .lh-body-text {
+    font-size: 13px;
+    color: var(--fg-mid);
+    line-height: 1.7;
+    font-style: italic;
+  }
+  .lh-scan-num {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--fg-dim);
+    text-align: right;
+    line-height: 2;
+  }
+  @media print {
+    body { background:#fff; padding:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="lh-outer">
+  <div class="lh-band">
+    <div class="lh-logo-area">
+      <svg width="26" height="19" viewBox="0 0 150 110" style="opacity:0.85;">
+        <circle cx="18"  cy="22" r="1.2" fill="#fff" fill-opacity="0.22"/>
+        <circle cx="36"  cy="15" r="1.4" fill="#fff" fill-opacity="0.28"/>
+        <circle cx="54"  cy="10" r="1.6" fill="#fff" fill-opacity="0.32"/>
+        <circle cx="72"  cy="6"  r="1.6" fill="#fff" fill-opacity="0.35"/>
+        <circle cx="90"  cy="10" r="1.5" fill="#fff" fill-opacity="0.30"/>
+        <circle cx="108" cy="15" r="1.3" fill="#fff" fill-opacity="0.25"/>
+        <circle cx="126" cy="22" r="1.1" fill="#fff" fill-opacity="0.20"/>
+        <circle cx="14"  cy="38" r="1.5" fill="#fff" fill-opacity="0.28"/>
+        <circle cx="32"  cy="31" r="2.2" fill="#fff" fill-opacity="0.42"/>
+        <circle cx="50"  cy="26" r="2.8" fill="#fff" fill-opacity="0.55"/>
+        <circle cx="68"  cy="22" r="3"   fill="#fff" fill-opacity="0.62"/>
+        <circle cx="86"  cy="26" r="2.6" fill="#fff" fill-opacity="0.52"/>
+        <circle cx="104" cy="31" r="2"   fill="#fff" fill-opacity="0.40"/>
+        <circle cx="122" cy="38" r="1.4" fill="#fff" fill-opacity="0.25"/>
+        <circle cx="48"  cy="42" r="4"   fill="#00E87A" fill-opacity="0.72"/>
+        <circle cx="66"  cy="38" r="5"   fill="#00E87A" fill-opacity="0.92"/>
+        <circle cx="84"  cy="42" r="4"   fill="#00E87A" fill-opacity="0.72"/>
+        <circle cx="68"  cy="54" r="4"   fill="#00E87A" fill-opacity="0.80"/>
+        <circle cx="50"  cy="58" r="3.4" fill="#00E87A" fill-opacity="0.68"/>
+        <circle cx="86"  cy="58" r="3.2" fill="#00E87A" fill-opacity="0.64"/>
+      </svg>
+      <div class="lh-logo-name">SCANOMATIC <em>LABS</em></div>
+    </div>
+    <div class="lh-meta">
+      hello@scanomaticlabs.co.uk<br>
+      www.scanomaticlabs.co.uk<br>
+      Bristol, United Kingdom
+    </div>
+  </div>
+  <div class="lh-green-bar"></div>
+  <div class="lh-body">
+    <div>
+      <div class="lh-body-label">// Document</div>
+      <div class="lh-body-text">Replace this area with your content</div>
+    </div>
+    <div class="lh-scan-num">
+      3D Spatial Capture<br>
+      Gaussian Splat · LiDAR · XR<br>
+      <span style="color:#00C060;font-size:9px;">● Active</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

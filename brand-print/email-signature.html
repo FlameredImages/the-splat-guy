@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scanomatic Labs — Email Signature</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fg:       #070A08;
+    --fg-mid:   rgba(7,10,8,0.55);
+    --fg-dim:   rgba(7,10,8,0.28);
+    --green:    #00C060;
+    --green-web:#00E87A;
+    --orange:   #FF7A00;
+    --border:   rgba(7,10,8,0.12);
+    --border-md:rgba(7,10,8,0.22);
+    --mono:     'Space Mono', monospace;
+    --sans:     'Space Grotesk', sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #d4d4d4;
+    padding: 32px;
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .sig-outer {
+    width: 540px;
+    background: #fff;
+    font-family: var(--sans);
+  }
+  .sig-top-bar {
+    height: 2px;
+    background: linear-gradient(to right, var(--green-web), var(--orange), transparent);
+  }
+  .sig-inner {
+    display: grid;
+    grid-template-columns: 180px 1px 1fr;
+    gap: 0;
+    padding: 16px 0 16px 0;
+  }
+  .sig-left {
+    padding: 0 20px 0 16px;
+  }
+  .sig-mark-wrap {
+    margin-bottom: 8px;
+  }
+  .sig-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    margin-bottom: 1px;
+  }
+  .sig-company {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--fg);
+    margin-bottom: 1px;
+  }
+  .sig-company em { font-style: normal; color: var(--orange); }
+  .sig-role {
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--fg-mid);
+    margin-bottom: 12px;
+  }
+  .sig-divider-v {
+    background: var(--border-md);
+    align-self: stretch;
+  }
+  .sig-right {
+    padding: 0 16px 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sig-contact-row {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 5px;
+  }
+  .sig-clabel {
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: var(--green);
+    text-transform: uppercase;
+    width: 30px;
+    flex-shrink: 0;
+  }
+  .sig-cval {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg);
+  }
+  .sig-cval a { color: var(--fg); text-decoration: none; }
+  .sig-services {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    line-height: 1.9;
+  }
+  .sig-tagline {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 7px;
+    letter-spacing: 3px;
+    color: var(--fg-dim);
+    text-transform: uppercase;
+  }
+  .sig-tagline em { font-style: normal; color: var(--green); }
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="logo-mark" viewBox="0 0 150 110">
+    <circle cx="18"  cy="22" r="1.2" fill="#00E87A" fill-opacity="0.22"/>
+    <circle cx="36"  cy="15" r="1.4" fill="#00E87A" fill-opacity="0.28"/>
+    <circle cx="54"  cy="10" r="1.6" fill="#00E87A" fill-opacity="0.32"/>
+    <circle cx="72"  cy="6"  r="1.6" fill="#00E87A" fill-opacity="0.35"/>
+    <circle cx="90"  cy="10" r="1.5" fill="#00E87A" fill-opacity="0.30"/>
+    <circle cx="108" cy="15" r="1.3" fill="#00E87A" fill-opacity="0.25"/>
+    <circle cx="126" cy="22" r="1.1" fill="#00E87A" fill-opacity="0.20"/>
+    <circle cx="14"  cy="38" r="1.5" fill="#00E87A" fill-opacity="0.28"/>
+    <circle cx="32"  cy="31" r="2.2" fill="#00E87A" fill-opacity="0.42"/>
+    <circle cx="50"  cy="26" r="2.8" fill="#00E87A" fill-opacity="0.55"/>
+    <circle cx="68"  cy="22" r="3"   fill="#00E87A" fill-opacity="0.62"/>
+    <circle cx="86"  cy="26" r="2.6" fill="#00E87A" fill-opacity="0.52"/>
+    <circle cx="104" cy="31" r="2"   fill="#00E87A" fill-opacity="0.40"/>
+    <circle cx="122" cy="38" r="1.4" fill="#00E87A" fill-opacity="0.25"/>
+    <circle cx="12"  cy="54" r="1.6" fill="#00E87A" fill-opacity="0.30"/>
+    <circle cx="30"  cy="47" r="2.8" fill="#00E87A" fill-opacity="0.52"/>
+    <circle cx="48"  cy="42" r="4"   fill="#00E87A" fill-opacity="0.72"/>
+    <circle cx="66"  cy="38" r="5"   fill="#00E87A" fill-opacity="0.92"/>
+    <circle cx="84"  cy="42" r="4"   fill="#00E87A" fill-opacity="0.72"/>
+    <circle cx="102" cy="47" r="2.8" fill="#00E87A" fill-opacity="0.52"/>
+    <circle cx="120" cy="54" r="1.6" fill="#00E87A" fill-opacity="0.30"/>
+    <circle cx="14"  cy="70" r="1.5" fill="#00E87A" fill-opacity="0.28"/>
+    <circle cx="32"  cy="63" r="2.4" fill="#00E87A" fill-opacity="0.48"/>
+    <circle cx="50"  cy="58" r="3.4" fill="#00E87A" fill-opacity="0.68"/>
+    <circle cx="68"  cy="54" r="4"   fill="#00E87A" fill-opacity="0.80"/>
+    <circle cx="86"  cy="58" r="3.2" fill="#00E87A" fill-opacity="0.64"/>
+    <circle cx="104" cy="63" r="2.2" fill="#00E87A" fill-opacity="0.44"/>
+    <circle cx="122" cy="70" r="1.4" fill="#00E87A" fill-opacity="0.25"/>
+    <circle cx="18"  cy="86" r="1.2" fill="#00E87A" fill-opacity="0.22"/>
+    <circle cx="36"  cy="79" r="1.8" fill="#00E87A" fill-opacity="0.36"/>
+    <circle cx="54"  cy="74" r="2.6" fill="#00E87A" fill-opacity="0.52"/>
+    <circle cx="72"  cy="70" r="3"   fill="#00E87A" fill-opacity="0.60"/>
+    <circle cx="90"  cy="74" r="2.4" fill="#00E87A" fill-opacity="0.48"/>
+    <circle cx="108" cy="79" r="1.6" fill="#00E87A" fill-opacity="0.32"/>
+    <circle cx="126" cy="86" r="1"   fill="#00E87A" fill-opacity="0.18"/>
+    <line x1="66" y1="38" x2="48" y2="42" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.18"/>
+    <line x1="66" y1="38" x2="84" y2="42" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.18"/>
+    <line x1="66" y1="38" x2="68" y2="54" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.18"/>
+    <line x1="48" y1="42" x2="50" y2="58" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.14"/>
+    <line x1="84" y1="42" x2="86" y2="58" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.14"/>
+    <line x1="50" y1="58" x2="68" y2="54" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.14"/>
+    <line x1="68" y1="54" x2="86" y2="58" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.14"/>
+    <line x1="68" y1="54" x2="72" y2="70" stroke="#00E87A" stroke-width="0.4" stroke-opacity="0.12"/>
+  </symbol>
+</svg>
+
+<div class="sig-outer">
+  <div class="sig-top-bar"></div>
+  <div class="sig-inner">
+
+    <div class="sig-left">
+      <div class="sig-mark-wrap">
+        <svg width="32" height="24" viewBox="0 0 150 110"><use href="#logo-mark"/></svg>
+      </div>
+      <div class="sig-name">Stephen Ryan</div>
+      <div class="sig-company">SCANOMATIC <em>LABS</em></div>
+      <div class="sig-role">Spatial Capture Specialist</div>
+      <div class="sig-tagline">3D Spatial <em>Capture</em></div>
+    </div>
+
+    <div class="sig-divider-v"></div>
+
+    <div class="sig-right">
+      <div>
+        <div class="sig-contact-row">
+          <span class="sig-clabel">Email</span>
+          <span class="sig-cval"><a href="mailto:hello@scanomaticlabs.co.uk">hello@scanomaticlabs.co.uk</a></span>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-clabel">Web</span>
+          <span class="sig-cval"><a href="https://www.scanomaticlabs.co.uk">www.scanomaticlabs.co.uk</a></span>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-clabel">Base</span>
+          <span class="sig-cval">Bristol, United Kingdom</span>
+        </div>
+      </div>
+      <div class="sig-services">
+        Architectural Documentation &nbsp;·&nbsp; Heritage Recording &nbsp;·&nbsp; Gaussian Splat &nbsp;·&nbsp; Scene Licensing
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

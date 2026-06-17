@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scanomatic Labs — Business Card Back</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background: #d4d4d4;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* 85×54mm at 6px/mm = 510×324px */
+  .card {
+    width: 510px;
+    height: 324px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+    background: #ffffff;
+  }
+
+  /* Weave on white */
+  .weave {
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(-45deg, rgba(0,192,96,0.05) 0px, rgba(0,192,96,0.05) 1px, transparent 1px, transparent 8px),
+      repeating-linear-gradient( 45deg, rgba(0,192,96,0.03) 0px, rgba(0,192,96,0.03) 1px, transparent 1px, transparent 8px);
+    background-size: 8px 8px, 8px 8px;
+  }
+
+  /* Ghost SCANOMATIC behind type */
+  .ghost {
+    position: absolute;
+    top: -14px; left: -6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 110px;
+    letter-spacing: -0.055em;
+    line-height: 0.83;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(7,10,8,0.045);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Point cloud right half */
+  .cloud-svg {
+    position: absolute;
+    top: 0; right: 0;
+    width: 50%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* Gradient fade: clear left, subtle tint right */
+  .fade {
+    position: absolute; inset: 0;
+    background: linear-gradient(105deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0) 55%,
+      rgba(240,245,240,0.18) 100%);
+    pointer-events: none;
+  }
+
+  /* Main content */
+  .inner {
+    position: absolute; inset: 0;
+    padding: 34px 36px 30px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(7,10,8,0.30);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px; height: 1px;
+    background: #00C060;
+    flex-shrink: 0;
+  }
+
+  .type {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+  }
+  .type .t1 { display:block; font-size:72px; color:rgba(7,10,8,0.10); }
+  .type .t2 { display:block; font-size:72px; color:#070A08; }
+  .type .t3 { display:block; font-size:72px; color:#00C060; }
+
+  /* URL bottom right */
+  .url {
+    position: absolute;
+    bottom: 28px; right: 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0,192,96,0.65);
+  }
+
+  /* Registration marks */
+  .reg { position:absolute; width:10px; height:10px; opacity:0.22; }
+  .reg::before, .reg::after { content:''; position:absolute; background:#070A08; }
+  .reg--tl { top:10px; left:10px; }
+  .reg--tl::before { top:0; left:4px; width:1px; height:100%; }
+  .reg--tl::after  { top:4px; left:0; width:100%; height:1px; }
+  .reg--br { bottom:10px; right:10px; }
+  .reg--br::before { top:0; left:4px; width:1px; height:100%; }
+  .reg--br::after  { top:4px; left:0; width:100%; height:1px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="weave"></div>
+  <div class="ghost">SCAN<br>OMATIC</div>
+
+  <svg class="cloud-svg" id="cloudSvg" viewBox="0 0 255 324" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <div class="fade"></div>
+
+  <div class="reg reg--tl"></div>
+  <div class="reg reg--br"></div>
+
+  <div class="inner">
+    <div class="eyebrow">Bristol, United Kingdom</div>
+    <div class="type">
+      <span class="t1">3D</span>
+      <span class="t2">SPATIAL</span>
+      <span class="t3">CAPTURE</span>
+    </div>
+  </div>
+
+  <div class="url">scanomaticlabs.co.uk</div>
+</div>
+
+<script>
+(function() {
+  const svg = document.getElementById('cloudSvg');
+  if (!svg) return;
+  function rand(a,b) { return a + Math.random()*(b-a); }
+  const dots = [];
+  for (let i=0; i<90; i++)
+    dots.push({x:rand(10,255), y:rand(0,200), r:rand(0.5,2.0), o:rand(0.04,0.24), g:true});
+  for (let i=0; i<40; i++)
+    dots.push({x:rand(30,255), y:rand(180,324), r:rand(0.4,1.4), o:rand(0.02,0.12), g:false});
+  for (let i=0; i<14; i++)
+    dots.push({x:rand(50,240), y:rand(10,170), r:rand(1.8,3.0), o:rand(0.28,0.50), g:true});
+  const orange = [];
+  for (let i=0; i<7; i++)
+    orange.push({x:rand(60,230), y:rand(10,140), r:rand(1.4,2.2), o:rand(0.18,0.36)});
+  svg.innerHTML =
+    dots.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(${d.g?'0,192,96':'7,10,8'},${d.o.toFixed(3)})"/>`).join('')+
+    orange.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(255,122,0,${d.o.toFixed(3)})"/>`).join('');
+})();
+</script>
+
+</body>
+</html>
