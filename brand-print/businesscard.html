@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Scanomatic Labs — Business Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0f0f0f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 56px;
+    padding: 80px 60px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .page-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.20);
+    text-align: center;
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .pair {
+    display: flex;
+    gap: 52px;
+    align-items: flex-start;
+  }
+
+  .card-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.28);
+  }
+
+  /* ── 85mm × 54mm at 6px/mm = 510 × 324px ── */
+  .card {
+    width: 510px;
+    height: 324px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 7px;
+    box-shadow:
+      0 0 0 1px rgba(240,245,240,0.06),
+      0 16px 64px rgba(0,0,0,0.75),
+      0 4px 16px rgba(0,0,0,0.5);
+    background-color: #070A08;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.111'/%3E%3C/svg%3E"),
+      repeating-linear-gradient(-45deg, rgba(0,232,122,0.064) 0px, rgba(0,232,122,0.064) 1px, transparent 1px, transparent 8px),
+      repeating-linear-gradient( 45deg, rgba(0,232,122,0.043) 0px, rgba(0,232,122,0.043) 1px, transparent 1px, transparent 8px);
+    background-size: 200px 200px, 8px 8px, 8px 8px;
+  }
+
+  /* ════════════════════════════════
+     FRONT
+  ════════════════════════════════ */
+  .card--front {
+    padding: 34px 40px 34px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Left edge bar — orange to match LABS */
+  .front__edge {
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom,
+      #FF7A00 0%,
+      rgba(255,122,0,0.4) 60%,
+      transparent 100%);
+  }
+
+  .front__brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.87;
+  }
+
+  .front__brand .line1 {
+    display: block;
+    font-size: 62px;
+    color: #F0F5F0;
+  }
+
+  .front__brand .line2 {
+    display: block;
+    font-size: 62px;
+    color: #FF7A00;
+  }
+
+  .front__divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .front__divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(240,245,240,0.12);
+  }
+
+  .front__tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.32);
+    white-space: nowrap;
+  }
+
+  .front__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  .front__name {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: #F0F5F0;
+    white-space: nowrap;
+  }
+
+  .front__role {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.35);
+    white-space: nowrap;
+  }
+
+  .front__contact {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .front__contact span {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    color: rgba(240,245,240,0.40);
+    white-space: nowrap;
+  }
+
+  .front__contact .sep {
+    color: rgba(240,245,240,0.18);
+    font-size: 10px;
+  }
+
+  .front__contact .highlight {
+    color: rgba(0,232,122,0.75);
+  }
+
+  /* Corner coord mark */
+  .front__corner-mark {
+    position: absolute;
+    bottom: 34px;
+    left: 48px;
+    width: 14px;
+    height: 14px;
+    border-left: 1px solid rgba(255,122,0,0.40);
+    border-bottom: 1px solid rgba(255,122,0,0.40);
+  }
+
+
+  /* ════════════════════════════════
+     BACK
+  ════════════════════════════════ */
+  .card--back {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 40px;
+  }
+
+  /* Ghost typography — fills background */
+  .back__ghost {
+    position: absolute;
+    top: -18px;
+    left: -8px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 134px;
+    letter-spacing: -0.055em;
+    line-height: 0.83;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(240,245,240,0.05);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  /* Courtyard scan photo — full bleed, screened in */
+  .back__photo {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    opacity: 0.55;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  /* Dark gradient overlay — darkens left where type lives, opens right */
+  .back__overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+      105deg,
+      rgba(7,10,8,0.82) 0%,
+      rgba(7,10,8,0.55) 50%,
+      rgba(7,10,8,0.18) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* SVG point cloud */
+  .back__svg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Main typographic content */
+  .back__content {
+    position: relative;
+    z-index: 3;
+  }
+
+  .back__eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.28);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .back__eyebrow::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: #00E87A;
+  }
+
+  .back__type {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+  }
+
+  .back__type .t1 { display: block; font-size: 78px; color: rgba(240,245,240,0.10); }
+  .back__type .t2 { display: block; font-size: 78px; color: #F0F5F0; }
+  .back__type .t3 { display: block; font-size: 78px; color: #00E87A; }
+
+  .back__url {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(0,232,122,0.60);
+    z-index: 3;
+    writing-mode: horizontal-tb;
+  }
+
+  /* Bleed mark corners — subtle registration marks */
+  .reg {
+    position: absolute;
+    width: 10px; height: 10px;
+    opacity: 0.22;
+  }
+  .reg::before, .reg::after {
+    content: '';
+    position: absolute;
+    background: rgba(240,245,240,0.5);
+  }
+  .reg--tl { top: 10px; left: 10px; }
+  .reg--tl::before { top: 0; left: 4px; width: 1px; height: 100%; }
+  .reg--tl::after  { top: 4px; left: 0; width: 100%; height: 1px; }
+
+  .reg--br { bottom: 10px; right: 10px; }
+  .reg--br::before { top: 0; left: 4px; width: 1px; height: 100%; }
+  .reg--br::after  { top: 4px; left: 0; width: 100%; height: 1px; }
+
+  /* Size note */
+  .size-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(240,245,240,0.18);
+    text-align: center;
+    margin-top: -32px;
+  }
+
+</style>
+</head>
+<body>
+
+<span class="page-label">Scanomatic Labs — Business Card Artwork</span>
+
+<div class="pair">
+
+  <!-- ── FRONT ── -->
+  <div class="card-wrap">
+    <span class="card-label">Front</span>
+    <div class="card card--front">
+
+      <div class="front__edge"></div>
+
+      <!-- Brand mark -->
+      <div class="front__brand">
+        <span class="line1">SCANOMATIC</span>
+        <span class="line2">LABS</span>
+      </div>
+
+      <!-- Divider + tagline -->
+      <div class="front__divider">
+        <div class="front__divider-line"></div>
+        <span class="front__tagline">3D Spatial Capture</span>
+        <div class="front__divider-line" style="max-width:28px;"></div>
+      </div>
+
+      <!-- Name + contact -->
+      <div class="front__bottom">
+        <div class="front__name">Stephen Ryan</div>
+        <div class="front__role">Spatial Capture Specialist</div>
+        <div class="front__contact">
+          <span>hello@scanomaticlabs.co.uk</span>
+          <span class="sep">·</span>
+          <span class="highlight">scanomaticlabs.co.uk</span>
+        </div>
+      </div>
+
+      <!-- Corner mark -->
+      <div class="front__corner-mark"></div>
+
+    </div>
+  </div>
+
+  <!-- ── BACK ── -->
+  <div class="card-wrap">
+    <span class="card-label">Back</span>
+    <div class="card card--back" id="backCard">
+
+      <!-- Courtyard scan photo — screened over dark bg -->
+      <img class="back__photo" src="assets/images/2.webp" alt="">
+
+      <!-- Gradient overlay — protects type legibility on left -->
+      <div class="back__overlay"></div>
+
+      <!-- Ghost text background -->
+      <div class="back__ghost">SCAN<br>OMATIC</div>
+
+      <!-- Point cloud SVG (generated by script) -->
+      <svg class="back__svg" id="pointSvg" viewBox="0 0 510 324" xmlns="http://www.w3.org/2000/svg"></svg>
+
+      <!-- Registration marks -->
+      <div class="reg reg--tl"></div>
+      <div class="reg reg--br"></div>
+
+      <!-- Main content -->
+      <div class="back__content">
+        <div class="back__eyebrow">Bristol, United Kingdom</div>
+        <div class="back__type">
+          <span class="t1">3D</span>
+          <span class="t2">SPATIAL</span>
+          <span class="t3">CAPTURE</span>
+        </div>
+      </div>
+
+      <!-- URL -->
+      <div class="back__url">scanomaticlabs.co.uk</div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="size-note">85 × 54 mm · 300 dpi print ready</div>
+
+<script>
+// ── Point cloud dot scatter ──
+(function() {
+  const svg = document.getElementById('pointSvg');
+  if (!svg) return;
+
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  const dots = [];
+
+  // Dense cluster — top right corner (evokes a scan return)
+  for (let i = 0; i < 90; i++) {
+    dots.push({ x: rand(300, 510), y: rand(0, 200), r: rand(0.5, 2.2), o: rand(0.05, 0.28), g: true });
+  }
+
+  // Medium scatter — right half
+  for (let i = 0; i < 50; i++) {
+    dots.push({ x: rand(250, 510), y: rand(100, 324), r: rand(0.4, 1.6), o: rand(0.03, 0.16), g: false });
+  }
+
+  // Sparse global scatter
+  for (let i = 0; i < 40; i++) {
+    dots.push({ x: rand(0, 510), y: rand(0, 324), r: rand(0.3, 1.0), o: rand(0.02, 0.09), g: false });
+  }
+
+  // A few bright highlight points
+  for (let i = 0; i < 14; i++) {
+    dots.push({ x: rand(320, 500), y: rand(8, 170), r: rand(1.8, 3.2), o: rand(0.35, 0.65), g: true });
+  }
+
+  // Occasional orange points
+  const orangeDots = [];
+  for (let i = 0; i < 8; i++) {
+    orangeDots.push({ x: rand(340, 490), y: rand(10, 140), r: rand(1.5, 2.5), o: rand(0.25, 0.50) });
+  }
+
+  svg.innerHTML =
+    dots.map(d => {
+      const col = d.g ? '0,232,122' : '240,245,240';
+      return `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(${col},${d.o.toFixed(3)})"/>`;
+    }).join('') +
+    orangeDots.map(d =>
+      `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(255,122,0,${d.o.toFixed(3)})"/>`
+    ).join('');
+})();
+</script>
+
+</body>
+</html>
