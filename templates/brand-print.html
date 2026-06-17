@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanomatic Labs — Brand Print Components</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #e8e8e8;
+    font-family: 'Inter', sans-serif;
+    padding: 40px;
+    color: #111;
+  }
+
+  /* ── SCREEN LABELS ── */
+  .sheet-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    margin-top: 40px;
+  }
+  .sheet-title:first-of-type { margin-top: 0; }
+
+  /* ── COMPONENT WRAPPER (screen only) ── */
+  .component {
+    background: #fff;
+    display: inline-block;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    margin-bottom: 8px;
+  }
+
+  /* ══════════════════════════════════════════
+     BUSINESS CARD  85mm × 55mm
+  ══════════════════════════════════════════ */
+  .card {
+    width: 85mm;
+    height: 55mm;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  /* crosshairs */
+  .ch {
+    position: absolute;
+    width: 10px; height: 10px;
+    z-index: 10;
+  }
+  .ch::before { content:''; position:absolute; width:1px; height:100%; left:50%; top:0; background:#111; }
+  .ch::after  { content:''; position:absolute; width:100%; height:1px; top:50%; left:0; background:#111; }
+  .ch-tl { top:3mm;  left:3mm; }
+  .ch-tr { top:3mm;  right:3mm; }
+  .ch-bl { bottom:3mm; left:3mm; }
+  .ch-br { bottom:3mm; right:3mm; }
+
+  /* dashed border lines */
+  .card::before {
+    content:'';
+    position:absolute;
+    inset: 6mm;
+    border: 1px dashed rgba(0,0,0,0.12);
+    pointer-events:none;
+    z-index: 1;
+  }
+
+  /* ── CARD FRONT ── */
+  .card-front {}
+
+  .card-front .splat-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.10;
+  }
+
+  .card-front .logo {
+    position: absolute;
+    top: 7mm;
+    left: 7mm;
+    z-index: 2;
+  }
+  .card-front .logo h2 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+    line-height: 0.88;
+    letter-spacing: 1px;
+    color: #111;
+  }
+  .card-front .tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 5px;
+    letter-spacing: 3px;
+    color: #666;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .card-front .coords {
+    position: absolute;
+    bottom: 7mm;
+    left: 7mm;
+    font-family: 'Space Mono', monospace;
+    font-size: 5px;
+    letter-spacing: 2px;
+    color: #aaa;
+    z-index: 2;
+  }
+
+  /* mid crosshair mark */
+  .card-front .mid-ch {
+    position: absolute;
+    right: 14mm;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px; height: 8px;
+    z-index: 2;
+    opacity: 0.3;
+  }
+  .card-front .mid-ch::before { content:''; position:absolute; width:1px; height:100%; left:50%; top:0; background:#111; }
+  .card-front .mid-ch::after  { content:''; position:absolute; width:100%; height:1px; top:50%; left:0; background:#111; }
+
+  /* ── CARD BACK ── */
+  .card-back {}
+
+  .card-back .splat-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+  }
+
+  .card-back .name-block {
+    position: absolute;
+    top: 8mm;
+    left: 8mm;
+    z-index: 2;
+  }
+  .card-back .name {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #111;
+    line-height: 1;
+  }
+  .card-back .role {
+    font-family: 'Space Mono', monospace;
+    font-size: 5px;
+    letter-spacing: 2.5px;
+    color: #888;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  .card-back .rule {
+    position: absolute;
+    top: 23mm;
+    left: 8mm;
+    right: 8mm;
+    height: 1px;
+    background: #ddd;
+    z-index: 2;
+  }
+
+  .card-back .contact {
+    position: absolute;
+    top: 26mm;
+    left: 8mm;
+    right: 8mm;
+    z-index: 2;
+  }
+  .card-back .contact-row {
+    display: flex;
+    gap: 4px;
+    align-items: baseline;
+    margin-bottom: 3px;
+  }
+  .card-back .c-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 4.5px;
+    letter-spacing: 1.5px;
+    color: #aaa;
+    text-transform: uppercase;
+    width: 10mm;
+    flex-shrink: 0;
+  }
+  .card-back .c-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 6px;
+    color: #111;
+    letter-spacing: 0.5px;
+  }
+
+  .card-back .back-logo {
+    position: absolute;
+    bottom: 7mm;
+    right: 8mm;
+    z-index: 2;
+    text-align: right;
+  }
+  .card-back .back-logo span {
+    font-family: 'Space Mono', monospace;
+    font-size: 5px;
+    letter-spacing: 3px;
+    color: #bbb;
+    text-transform: uppercase;
+  }
+  .card-back .brand-sq {
+    display: inline-block;
+    width: 5px; height: 5px;
+    background: #111;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  /* ══════════════════════════════════════════
+     EMAIL SIGNATURE  — fixed width 540px
+  ══════════════════════════════════════════ */
+  .sig-wrap {
+    width: 540px;
+    background: #fff;
+  }
+
+  .sig {
+    width: 540px;
+    font-family: 'Inter', Arial, sans-serif;
+    border-top: 2px solid #111;
+    padding-top: 16px;
+    display: grid;
+    grid-template-columns: auto 1px auto;
+    gap: 0;
+  }
+  .sig-left {
+    padding-right: 20px;
+    min-width: 180px;
+  }
+  .sig-divider {
+    background: #ddd;
+    align-self: stretch;
+  }
+  .sig-right {
+    padding-left: 20px;
+  }
+
+  .sig-name {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: #111;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .sig-company {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    color: #111;
+    text-transform: uppercase;
+    margin-bottom: 1px;
+  }
+  .sig-role {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .sig-contact-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .sig-clabel {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    color: #aaa;
+    text-transform: uppercase;
+    width: 28px;
+    flex-shrink: 0;
+  }
+  .sig-cval {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #111;
+  }
+  .sig-cval a {
+    color: #111;
+    text-decoration: none;
+  }
+
+  .sig-tagline-block {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  .sig-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 3px;
+    color: #aaa;
+    text-transform: uppercase;
+  }
+
+  /* sig logo side */
+  .sig-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sig-logo-text {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 44px;
+    line-height: 0.88;
+    letter-spacing: 1px;
+    color: #111;
+    position: relative;
+  }
+  .sig-splat {
+    width: 160px;
+    height: 80px;
+    opacity: 0.12;
+    display: block;
+  }
+  .sig-coords {
+    font-family: 'Space Mono', monospace;
+    font-size: 7px;
+    letter-spacing: 2px;
+    color: #bbb;
+    margin-top: 8px;
+  }
+
+  /* ══════════════════════════════════════════
+     TEXTURE TILE — standalone export
+  ══════════════════════════════════════════ */
+  .texture-wrap {
+    width: 400px;
+    height: 260px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .sheet-title { display: none; }
+    .component { box-shadow: none; display: block; page-break-inside: avoid; margin-bottom: 20mm; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+  SHARED SVG DEFS (reused across components)
+════════════════════════════════════════ -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <radialGradient id="sfade" cx="65%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#000" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+<!-- ══════════════════════════════════════════
+  1. BUSINESS CARD FRONT
+══════════════════════════════════════════ -->
+<p class="sheet-title">// Business Card — Front &nbsp;(85 × 55 mm)</p>
+<div class="component">
+<div class="card card-front">
+  <div class="ch ch-tl"></div>
+  <div class="ch ch-tr"></div>
+  <div class="ch ch-bl"></div>
+  <div class="ch ch-br"></div>
+
+  <!-- point-cloud background -->
+  <svg class="splat-bg" viewBox="0 0 340 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="url(#sfade)">
+      <circle cx="160" cy="140" r="1.3"/><circle cx="170" cy="138" r="1.5"/><circle cx="180" cy="136" r="1.2"/>
+      <circle cx="190" cy="134" r="1.4"/><circle cx="200" cy="132" r="1.1"/><circle cx="210" cy="131" r="1.3"/>
+      <circle cx="220" cy="130" r="1.2"/><circle cx="230" cy="130" r="1.4"/><circle cx="240" cy="131" r="1.1"/>
+      <circle cx="250" cy="132" r="1.3"/><circle cx="260" cy="133" r="1.0"/><circle cx="270" cy="134" r="1.2"/>
+      <circle cx="280" cy="135" r="1.4"/><circle cx="290" cy="136" r="1.1"/><circle cx="300" cy="138" r="1.3"/>
+      <circle cx="310" cy="140" r="1.0"/><circle cx="320" cy="142" r="1.2"/><circle cx="330" cy="144" r="1.4"/>
+      <circle cx="355" cy="155" r="1.0"/><circle cx="358" cy="162" r="1.2"/><circle cx="360" cy="170" r="1.1"/>
+      <circle cx="175" cy="155" r="0.9"/><circle cx="185" cy="152" r="1.1"/><circle cx="195" cy="150" r="0.8"/>
+      <circle cx="205" cy="148" r="1.0"/><circle cx="215" cy="146" r="0.9"/><circle cx="225" cy="145" r="1.1"/>
+      <circle cx="235" cy="145" r="0.8"/><circle cx="245" cy="145" r="1.0"/><circle cx="255" cy="145" r="0.9"/>
+      <circle cx="265" cy="146" r="1.1"/><circle cx="275" cy="147" r="0.8"/><circle cx="285" cy="148" r="1.0"/>
+      <circle cx="295" cy="150" r="0.9"/><circle cx="305" cy="152" r="1.1"/><circle cx="315" cy="155" r="0.8"/>
+      <circle cx="178" cy="167" r="0.7"/><circle cx="190" cy="164" r="0.9"/><circle cx="202" cy="162" r="0.7"/>
+      <circle cx="214" cy="160" r="0.8"/><circle cx="226" cy="159" r="0.7"/><circle cx="238" cy="158" r="0.9"/>
+      <circle cx="250" cy="158" r="0.7"/><circle cx="262" cy="159" r="0.8"/><circle cx="274" cy="160" r="0.7"/>
+      <circle cx="286" cy="162" r="0.9"/><circle cx="298" cy="164" r="0.7"/><circle cx="310" cy="167" r="0.8"/>
+      <circle cx="150" cy="190" r="0.8"/><circle cx="163" cy="188" r="0.6"/><circle cx="176" cy="186" r="0.8"/>
+      <circle cx="189" cy="184" r="0.6"/><circle cx="202" cy="183" r="0.8"/><circle cx="215" cy="182" r="0.6"/>
+      <circle cx="228" cy="182" r="0.8"/><circle cx="241" cy="182" r="0.6"/><circle cx="254" cy="183" r="0.8"/>
+      <circle cx="267" cy="184" r="0.6"/><circle cx="280" cy="185" r="0.8"/><circle cx="293" cy="187" r="0.6"/>
+      <circle cx="306" cy="189" r="0.8"/><circle cx="319" cy="191" r="0.6"/><circle cx="332" cy="194" r="0.8"/>
+      <circle cx="370" cy="160" r="0.6"/><circle cx="378" cy="155" r="0.8"/><circle cx="386" cy="151" r="0.6"/>
+      <circle cx="394" cy="148" r="0.8"/><circle cx="402" cy="146" r="0.6"/><circle cx="410" cy="145" r="0.8"/>
+      <circle cx="160" cy="190" r="1.4"/><circle cx="168" cy="185" r="1.1"/><circle cx="176" cy="180" r="1.3"/>
+      <circle cx="184" cy="176" r="1.0"/><circle cx="155" cy="196" r="1.2"/><circle cx="148" cy="202" r="0.9"/>
+      <circle cx="172" cy="192" r="1.4"/><circle cx="180" cy="188" r="1.1"/><circle cx="188" cy="183" r="1.2"/>
+    </g>
+  </svg>
+
+  <div class="logo">
+    <h2>SCANOMATIC<br>LABS</h2>
+    <p class="tagline">Spatial Capture &amp; Documentation</p>
+  </div>
+  <div class="mid-ch"></div>
+  <div class="coords">51.4545° N, 2.5879° W</div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+  2. BUSINESS CARD BACK
+══════════════════════════════════════════ -->
+<p class="sheet-title">// Business Card — Back &nbsp;(85 × 55 mm)</p>
+<div class="component">
+<div class="card card-back">
+  <div class="ch ch-tl"></div>
+  <div class="ch ch-tr"></div>
+  <div class="ch ch-bl"></div>
+  <div class="ch ch-br"></div>
+
+  <svg class="splat-bg" viewBox="0 0 340 220" preserveAspectRatio="xMaxYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <g fill="url(#sfade)">
+      <circle cx="250" cy="132" r="1.3"/><circle cx="260" cy="133" r="1.0"/><circle cx="270" cy="134" r="1.2"/>
+      <circle cx="280" cy="135" r="1.4"/><circle cx="290" cy="136" r="1.1"/><circle cx="300" cy="138" r="1.3"/>
+      <circle cx="310" cy="140" r="1.0"/><circle cx="320" cy="142" r="1.2"/><circle cx="330" cy="144" r="1.4"/>
+      <circle cx="355" cy="155" r="1.0"/><circle cx="358" cy="162" r="1.2"/><circle cx="360" cy="170" r="1.1"/>
+      <circle cx="265" cy="146" r="1.1"/><circle cx="275" cy="147" r="0.8"/><circle cx="285" cy="148" r="1.0"/>
+      <circle cx="295" cy="150" r="0.9"/><circle cx="305" cy="152" r="1.1"/><circle cx="315" cy="155" r="0.8"/>
+      <circle cx="262" cy="159" r="0.8"/><circle cx="274" cy="160" r="0.7"/>
+      <circle cx="286" cy="162" r="0.9"/><circle cx="298" cy="164" r="0.7"/><circle cx="310" cy="167" r="0.8"/>
+      <circle cx="267" cy="184" r="0.6"/><circle cx="280" cy="185" r="0.8"/><circle cx="293" cy="187" r="0.6"/>
+      <circle cx="306" cy="189" r="0.8"/><circle cx="319" cy="191" r="0.6"/><circle cx="332" cy="194" r="0.8"/>
+      <circle cx="370" cy="160" r="0.6"/><circle cx="378" cy="155" r="0.8"/><circle cx="386" cy="151" r="0.6"/>
+      <circle cx="394" cy="148" r="0.8"/><circle cx="402" cy="146" r="0.6"/><circle cx="410" cy="145" r="0.8"/>
+      <circle cx="172" cy="192" r="1.4"/><circle cx="180" cy="188" r="1.1"/><circle cx="188" cy="183" r="1.2"/>
+    </g>
+  </svg>
+
+  <div class="name-block">
+    <div class="name">Stephen Ryan</div>
+    <div class="role">Spatial Capture Specialist</div>
+  </div>
+  <div class="rule"></div>
+  <div class="contact">
+    <div class="contact-row">
+      <span class="c-label">Email</span>
+      <span class="c-value">sr@scanomaticlabs.co.uk</span>
+    </div>
+    <div class="contact-row">
+      <span class="c-label">Web</span>
+      <span class="c-value">www.scanomaticlabs.co.uk</span>
+    </div>
+    <div class="contact-row">
+      <span class="c-label">Base</span>
+      <span class="c-value">Bristol, United Kingdom</span>
+    </div>
+  </div>
+  <div class="back-logo">
+    <span>Scanomatic Labs</span><span class="brand-sq"></span>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+  3. EMAIL SIGNATURE
+══════════════════════════════════════════ -->
+<p class="sheet-title">// Email Signature &nbsp;(540px wide)</p>
+<div class="component sig-wrap">
+<table class="sig" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="sig-left" style="vertical-align:top; padding-right:20px; min-width:180px;">
+      <div class="sig-name">Stephen Ryan</div>
+      <div class="sig-company">Scanomatic Labs</div>
+      <div class="sig-role">Spatial Capture &amp; Documentation</div>
+      <div class="sig-contact-row">
+        <span class="sig-clabel">Email</span>
+        <span class="sig-cval"><a href="mailto:sr@scanomaticlabs.co.uk">sr@scanomaticlabs.co.uk</a></span>
+      </div>
+      <div class="sig-contact-row">
+        <span class="sig-clabel">Web</span>
+        <span class="sig-cval"><a href="https://www.scanomaticlabs.co.uk">www.scanomaticlabs.co.uk</a></span>
+      </div>
+      <div class="sig-contact-row">
+        <span class="sig-clabel">Base</span>
+        <span class="sig-cval">Bristol, United Kingdom</span>
+      </div>
+      <div class="sig-tagline-block">
+        <div class="sig-tagline">Spatial Capture &amp; Documentation</div>
+      </div>
+    </td>
+    <td class="sig-divider" style="width:1px; background:#ddd;"></td>
+    <td class="sig-logo" style="vertical-align:top; padding-left:20px;">
+      <div class="sig-logo-text">SCANOMATIC<br>LABS</div>
+      <svg class="sig-splat" viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMaxYMax meet">
+        <g fill="#000">
+          <circle cx="160" cy="100" r="1.3"/><circle cx="170" cy="98" r="1.5"/><circle cx="180" cy="96" r="1.2"/>
+          <circle cx="190" cy="94" r="1.4"/><circle cx="200" cy="92" r="1.1"/><circle cx="210" cy="91" r="1.3"/>
+          <circle cx="220" cy="90" r="1.2"/><circle cx="230" cy="90" r="1.4"/><circle cx="240" cy="91" r="1.1"/>
+          <circle cx="250" cy="92" r="1.3"/><circle cx="260" cy="93" r="1.0"/><circle cx="270" cy="94" r="1.2"/>
+          <circle cx="280" cy="95" r="1.4"/><circle cx="290" cy="96" r="1.1"/><circle cx="300" cy="98" r="1.3"/>
+          <circle cx="175" cy="115" r="0.9"/><circle cx="185" cy="112" r="1.1"/><circle cx="195" cy="110" r="0.8"/>
+          <circle cx="205" cy="108" r="1.0"/><circle cx="215" cy="106" r="0.9"/><circle cx="225" cy="105" r="1.1"/>
+          <circle cx="235" cy="105" r="0.8"/><circle cx="245" cy="105" r="1.0"/><circle cx="255" cy="105" r="0.9"/>
+          <circle cx="265" cy="106" r="1.1"/><circle cx="275" cy="107" r="0.8"/><circle cx="285" cy="108" r="1.0"/>
+          <circle cx="150" cy="140" r="0.8"/><circle cx="163" cy="138" r="0.6"/><circle cx="176" cy="136" r="0.8"/>
+          <circle cx="189" cy="134" r="0.6"/><circle cx="202" cy="133" r="0.8"/><circle cx="215" cy="132" r="0.6"/>
+          <circle cx="228" cy="132" r="0.8"/><circle cx="241" cy="132" r="0.6"/><circle cx="254" cy="133" r="0.8"/>
+          <circle cx="267" cy="134" r="0.6"/><circle cx="280" cy="135" r="0.8"/><circle cx="293" cy="137" r="0.6"/>
+          <circle cx="306" cy="139" r="0.8"/>
+        </g>
+      </svg>
+      <div class="sig-coords">51.4545° N, 2.5879° W</div>
+    </td>
+  </tr>
+</table>
+</div>
+
+<!-- ══════════════════════════════════════════
+  4. BACKGROUND TEXTURE — standalone SVG tile
+══════════════════════════════════════════ -->
+<p class="sheet-title">// Point-Cloud Texture — SVG Tile &nbsp;(export as .svg or .png)</p>
+<div class="component">
+<div class="texture-wrap">
+  <svg width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="tfade" cx="60%" cy="50%" r="55%">
+        <stop offset="0%"   stop-color="#111" stop-opacity="1"/>
+        <stop offset="100%" stop-color="#111" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <rect width="400" height="260" fill="#fff"/>
+    <g fill="url(#tfade)">
+      <!-- roof -->
+      <circle cx="100" cy="110" r="1.3"/><circle cx="112" cy="108" r="1.5"/><circle cx="124" cy="106" r="1.2"/>
+      <circle cx="136" cy="104" r="1.4"/><circle cx="148" cy="102" r="1.1"/><circle cx="160" cy="101" r="1.3"/>
+      <circle cx="172" cy="100" r="1.2"/><circle cx="184" cy="100" r="1.4"/><circle cx="196" cy="101" r="1.1"/>
+      <circle cx="208" cy="102" r="1.3"/><circle cx="220" cy="103" r="1.0"/><circle cx="232" cy="104" r="1.2"/>
+      <circle cx="244" cy="105" r="1.4"/><circle cx="256" cy="106" r="1.1"/><circle cx="268" cy="108" r="1.3"/>
+      <circle cx="280" cy="110" r="1.0"/><circle cx="292" cy="112" r="1.2"/><circle cx="304" cy="114" r="1.4"/>
+      <circle cx="316" cy="117" r="1.1"/><circle cx="328" cy="120" r="1.3"/>
+      <!-- right edge -->
+      <circle cx="333" cy="127" r="1.0"/><circle cx="336" cy="134" r="1.2"/><circle cx="338" cy="141" r="1.1"/>
+      <circle cx="339" cy="149" r="1.3"/><circle cx="340" cy="157" r="1.0"/>
+      <!-- upper wall -->
+      <circle cx="115" cy="125" r="0.9"/><circle cx="127" cy="122" r="1.1"/><circle cx="139" cy="120" r="0.8"/>
+      <circle cx="151" cy="118" r="1.0"/><circle cx="163" cy="116" r="0.9"/><circle cx="175" cy="115" r="1.1"/>
+      <circle cx="187" cy="115" r="0.8"/><circle cx="199" cy="115" r="1.0"/><circle cx="211" cy="115" r="0.9"/>
+      <circle cx="223" cy="116" r="1.1"/><circle cx="235" cy="117" r="0.8"/><circle cx="247" cy="118" r="1.0"/>
+      <circle cx="259" cy="120" r="0.9"/><circle cx="271" cy="122" r="1.1"/><circle cx="283" cy="125" r="0.8"/>
+      <circle cx="295" cy="128" r="1.0"/><circle cx="307" cy="131" r="0.9"/><circle cx="319" cy="135" r="1.1"/>
+      <!-- mid wall -->
+      <circle cx="118" cy="137" r="0.7"/><circle cx="132" cy="134" r="0.9"/><circle cx="146" cy="132" r="0.7"/>
+      <circle cx="160" cy="130" r="0.8"/><circle cx="174" cy="129" r="0.7"/><circle cx="188" cy="128" r="0.9"/>
+      <circle cx="202" cy="128" r="0.7"/><circle cx="216" cy="129" r="0.8"/><circle cx="230" cy="130" r="0.7"/>
+      <circle cx="244" cy="132" r="0.9"/><circle cx="258" cy="134" r="0.7"/><circle cx="272" cy="137" r="0.8"/>
+      <circle cx="286" cy="141" r="0.7"/><circle cx="300" cy="145" r="0.9"/>
+      <!-- front face dense -->
+      <circle cx="106" cy="160" r="1.4"/><circle cx="114" cy="155" r="1.1"/><circle cx="122" cy="150" r="1.3"/>
+      <circle cx="130" cy="146" r="1.0"/><circle cx="100" cy="166" r="1.2"/><circle cx="94" cy="172" r="0.9"/>
+      <circle cx="118" cy="162" r="1.4"/><circle cx="126" cy="158" r="1.1"/><circle cx="134" cy="153" r="1.2"/>
+      <!-- ground -->
+      <circle cx="90" cy="190" r="0.8"/><circle cx="103" cy="188" r="0.6"/><circle cx="116" cy="186" r="0.8"/>
+      <circle cx="129" cy="184" r="0.6"/><circle cx="142" cy="183" r="0.8"/><circle cx="155" cy="182" r="0.6"/>
+      <circle cx="168" cy="182" r="0.8"/><circle cx="181" cy="182" r="0.6"/><circle cx="194" cy="183" r="0.8"/>
+      <circle cx="207" cy="184" r="0.6"/><circle cx="220" cy="185" r="0.8"/><circle cx="233" cy="187" r="0.6"/>
+      <circle cx="246" cy="189" r="0.8"/><circle cx="259" cy="191" r="0.6"/><circle cx="272" cy="194" r="0.8"/>
+      <circle cx="285" cy="197" r="0.6"/><circle cx="298" cy="200" r="0.8"/>
+      <!-- far right receding -->
+      <circle cx="310" cy="125" r="0.6"/><circle cx="320" cy="120" r="0.8"/><circle cx="330" cy="116" r="0.6"/>
+      <circle cx="340" cy="113" r="0.8"/><circle cx="350" cy="112" r="0.6"/><circle cx="360" cy="113" r="0.8"/>
+      <circle cx="370" cy="116" r="0.6"/><circle cx="380" cy="120" r="0.8"/><circle cx="390" cy="125" r="0.6"/>
+      <!-- ambient scatter -->
+      <circle cx="80" cy="200" r="0.5"/><circle cx="95" cy="205" r="0.4"/><circle cx="110" cy="208" r="0.5"/>
+      <circle cx="320" cy="175" r="0.4"/><circle cx="335" cy="180" r="0.5"/><circle cx="350" cy="186" r="0.4"/>
+      <circle cx="170" cy="210" r="0.4"/><circle cx="200" cy="215" r="0.5"/><circle cx="230" cy="212" r="0.4"/>
+      <!-- top sparse -->
+      <circle cx="160" cy="88" r="0.5"/><circle cx="180" cy="85" r="0.6"/><circle cx="200" cy="83" r="0.4"/>
+      <circle cx="220" cy="82" r="0.6"/><circle cx="240" cy="83" r="0.4"/><circle cx="260" cy="85" r="0.6"/>
+    </g>
+  </svg>
+</div>
+</div>
+
+</body>
+</html>
