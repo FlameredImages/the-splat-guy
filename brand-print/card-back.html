@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Scanomatic Labs — Business Card Back</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   body {
@@ -172,7 +174,7 @@
     orange.push({x:rand(60,230), y:rand(10,140), r:rand(1.4,2.2), o:rand(0.18,0.36)});
   svg.innerHTML =
     dots.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(${d.g?'0,192,96':'7,10,8'},${d.o.toFixed(3)})"/>`).join('')+
-    orange.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(255,122,0,${d.o.toFixed(3)})"/>`).join('');
+    orange.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(232,122,0,${d.o.toFixed(3)})"/>`).join('');
 })();
 </script>
 

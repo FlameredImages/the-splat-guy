@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Scanomatic Labs — Business Card Front</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
   body {
@@ -36,7 +38,7 @@
     position: absolute;
     top: 0; left: 0;
     width: 4px; height: 100%;
-    background: linear-gradient(to bottom, #FF7A00, rgba(255,122,0,0.3) 60%, transparent);
+    background: linear-gradient(to bottom, #E87A00, rgba(232,122,0,0.3) 60%, transparent);
   }
 
   /* Point cloud SVG fills right side */
@@ -64,7 +66,7 @@
     line-height: 0.87;
   }
   .brand .line1 { display: block; font-size: 60px; color: #070A08; }
-  .brand .line2 { display: block; font-size: 60px; color: #FF7A00; }
+  .brand .line2 { display: block; font-size: 60px; color: #E87A00; }
 
   .divider {
     display: flex;
@@ -126,8 +128,8 @@
     position: absolute;
     bottom: 32px; left: 44px;
     width: 14px; height: 14px;
-    border-left: 1px solid rgba(255,122,0,0.40);
-    border-bottom: 1px solid rgba(255,122,0,0.40);
+    border-left: 1px solid rgba(232,122,0,0.40);
+    border-bottom: 1px solid rgba(232,122,0,0.40);
   }
 
   /* Crosshair registration marks */
@@ -194,7 +196,7 @@
     orange.push({x:rand(100,260), y:rand(8,130), r:rand(1.5,2.2), o:rand(0.20,0.40)});
   svg.innerHTML =
     dots.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(${d.g?'0,192,96':'7,10,8'},${d.o.toFixed(3)})"/>`).join('')+
-    orange.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(255,122,0,${d.o.toFixed(3)})"/>`).join('');
+    orange.map(d=>`<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${d.r.toFixed(2)}" fill="rgba(232,122,0,${d.o.toFixed(3)})"/>`).join('');
 })();
 </script>
 
